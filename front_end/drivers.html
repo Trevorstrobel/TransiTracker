@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>TransiTracker</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="transitracker.css">
+  </head>
+  <body>
+    <h1>TransiTracker</h1>
+      <div id = "mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="index.html">Dashboard</a>
+        <a href="inventory.html">Inventory</a>
+        <a href="requests.html">Requests</a>
+        <a href="drivers.html">Drivers</a>
+      </div>
+    <p>Here is the drivers page</p>
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+    <div class="float-right mr-5"><input type="text" placeholder="Search.."></div>
+    <div class="container pt-1 border">
+      <h5>Drivers</h5>
+      <table style="width:100%" >
+        <tr>
+          <th>Driver Name</th>
+          <th>Email</th>
+          <th>Requests</th>
+          <th>Edit</th>
+        </tr>
+        <tr>
+          <td>Trevor Strobel</td>
+          <td>strobelt09@students.ecu.edu</td>
+          <td><a href="requests.html">See Requests</a></td>
+        </tr>
+        <tr>
+          <td>Nicholas Everette</td>
+          <td>evertten17@students.ecu.edu</td>
+          <td><a href="requests.html">See Requests</a></td>
+        </tr>
+      </table>
+    </div>
+
+    <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
