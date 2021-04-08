@@ -66,6 +66,22 @@ CREATE TABLE `Transaction` (
     PRIMARY KEY(`TransactionID`),
     FOREIGN KEY (`EmployeeID`) REFERENCES Employee(EmployeeID),
     FOREIGN KEY (`ItemID`) REFERENCES Item(ItemID)
-)
+);
+```
 
+
+
+
+<h4>Login Table </h4>
+```sql
+
+CREATE TABLE `Login` (
+
+	`Username` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT `Employee's log in username`,
+	`Password` VARCHAR(30) CHARSET SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT `Employees login password`,
+	`EmployeeID` INT NOT NULL,
+
+	PRIMARY KEY (`Username`),
+	FOREIGN KEY (`EmployeeID`) REFERENCES Employee(EmployeeID)
+);
 ```
