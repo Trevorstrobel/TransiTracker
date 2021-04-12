@@ -20,7 +20,7 @@
         background-color: #3a3a3a;
       }
 
-      #main-holder {
+      .formLayout {
         width: 75%;
         height: 85%;
         display: grid;
@@ -29,6 +29,10 @@
         background-color: white;
         border-radius: 7px;
         box-shadow: 0px 0px 5px 2px black;
+      }
+      
+      #main-holder {
+        
       }
 
       #login-error-msg-holder {
@@ -90,8 +94,8 @@
     </style>
   </head>
   <body>
-    <form class="" action="dashboard.html" method="post">
-      <main id="main-holder">
+    <form class = "formLayout" action="url/route" method="post">
+      <main>
         <img src = "ECU_logo.jpg">
         <h1 id="login-header">Login</h1>
 
@@ -111,7 +115,17 @@
     </form>
 
     <script type="text/javascript">
-
+      // function validate(){
+      //   var username = document.getElementById('username-field').value;
+      //   var password = document.getElementById('password-field').value;
+      //   if (username == admin && pasword == pass){
+      //     alert('success')
+      //     return False;
+      //   }
+      //   else{
+      //     alert('Wrong Password or Username');
+      //   }
+      }
     </script>
   </body>
 </html>
