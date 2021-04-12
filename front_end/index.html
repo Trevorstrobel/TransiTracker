@@ -1,83 +1,117 @@
 <!DOCTYPE html>
+
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>TransiTracker</title>
+    <title>TransiTracker Login</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="transitracker.css">
+    <style media="screen">
+      html {
+          height: 100%;
+      }
+
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        background-color: #3a3a3a;
+      }
+
+      #main-holder {
+        width: 75%;
+        height: 85%;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        background-color: white;
+        border-radius: 7px;
+        box-shadow: 0px 0px 5px 2px black;
+      }
+
+      #login-error-msg-holder {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+      }
+
+      #login-error-msg {
+        width: 23%;
+        text-align: center;
+        margin: 0;
+        padding: 5px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #8a0000;
+        border: 1px solid #8a0000;
+        background-color: #e58f8f;
+        opacity: 0;
+      }
+
+      #error-msg-second-line {
+        display: block;
+      }
+
+      #login-form {
+        align-self: flex-start;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+      }
+
+      .login-form-field::placeholder {
+        color: #3a3a3a;
+      }
+
+      .login-form-field {
+        border: none;
+        border-bottom: 1px solid #3a3a3a;
+        margin-bottom: 10px;
+        border-radius: 3px;
+        outline: none;
+        padding: 0px 0px 5px 5px;
+      }
+
+      #login-form-submit {
+        width: 100%;
+        padding: 7px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        background-color: #3a3a3a;
+        cursor: pointer;
+        outline: none;
+      }
+    </style>
   </head>
   <body>
-    <h1>TransiTracker</h1>
-      <div id = "mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="index.html">Dashboard</a>
-        <a href="inventory.html">Inventory</a>
-        <a href="requests.html">Requests</a>
-        <a href="drivers.html">Drivers</a>
-      </div>
-    <p>Here is the dashboard page</p>
-    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
-    <div class="container pt-1 border">
-      <h5>Low Stock Alert</h5>
-      <table style="width:100%" >
-        <tr>
-          <th>Item</th>
-          <th>Curr. Stock</th>
-          <th>Threshold</th>
-          <th>Order</th>
-        </tr>
-        <tr>
-          <td>Clorox Wipes</td>
-          <td>40</td>
-          <td>50</td>
-          <td><a href="https://www.Walmart.com">Walmart.com</a></td>
-        </tr>
-        <tr>
-          <td>Supervisor Jackets Small</td>
-          <td>3</td>
-          <td>20</td>
-          <td><a href="#">Jackets.com</a></td>
-        </tr>
-      </table>
-    </div>
-    <div class="container mt-4 pt-1 border">
-      <h5>Recent Transactions</h5>
-      <table style="width:100%" >
-        <tr>
-          <th>Item</th>
-          <th>No. Taken</th>
-          <th>Curr. Stock</th>
-          <th>Driver</th>
-          <th>Vehicle</th>
-        </tr>
-        <tr>
-          <td>Clorox Wipes</td>
-          <td>1</td>
-          <td>40</td>
-          <td>smithj10</td>
-          <td>103</td>
-        </tr>
-        <tr>
-          <td>ECU Transit Hoodie</td>
-          <td>3</td>
-          <td>10</td>
-          <td>robertsw17</td>
-          <td>N/A</td>
-        </tr>
-      </table>
-    </div>
-    <script>
-    function openNav() {
-      document.getElementById("mySidenav").style.width = "250px";
-    }
+    <form class="" action="index.html" method="post">
+      <main id="main-holder">
+        <img src = "ECU_logo.jpg">
+        <h1 id="login-header">Login</h1>
 
-    function closeNav() {
-      document.getElementById("mySidenav").style.width = "0";
-    }
+        <div id="login-error-msg-holder">
+          <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
+        </div>
+
+        <form id="login-form">
+          <input type="text" name="username" id="username-field" class="login-form-field" placeholder="Username">
+          <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Password">
+          <input type="submit" value="Login" id="login-form-submit">
+        </form>
+
+
+
+      </main>
+    </form>
+
+    <script type="text/javascript">
+
     </script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
 </html>

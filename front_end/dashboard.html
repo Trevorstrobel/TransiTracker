@@ -16,31 +16,57 @@
         <a href="requests.html">Requests</a>
         <a href="drivers.html">Drivers</a>
       </div>
-    <p>Here is the drivers page</p>
+    <p>Here is the dashboard page</p>
     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
-    <div class="float-right mr-5"><input type="text" placeholder="Search.."></div>
     <div class="container pt-1 border">
-      <h5>Drivers</h5>
+      <h5>Low Stock Alert</h5>
       <table style="width:100%" >
         <tr>
-          <th>Driver Name</th>
-          <th>Email</th>
-          <th>Requests</th>
-          <th>Edit</th>
+          <th>Item</th>
+          <th>Curr. Stock</th>
+          <th>Threshold</th>
+          <th>Order</th>
         </tr>
         <tr>
-          <td>Trevor Strobel</td>
-          <td>strobelt09@students.ecu.edu</td>
-          <td><a href="requests.html">See Requests</a></td>
+          <td>Clorox Wipes</td>
+          <td>40</td>
+          <td>50</td>
+          <td><a href="https://www.Walmart.com">Walmart.com</a></td>
         </tr>
         <tr>
-          <td>Nicholas Everette</td>
-          <td>evertten17@students.ecu.edu</td>
-          <td><a href="requests.html">See Requests</a></td>
+          <td>Supervisor Jackets Small</td>
+          <td>3</td>
+          <td>20</td>
+          <td><a href="#">Jackets.com</a></td>
         </tr>
       </table>
     </div>
-
+    <div class="container mt-4 pt-1 border">
+      <h5>Recent Transactions</h5>
+      <table style="width:100%" >
+        <tr>
+          <th>Item</th>
+          <th>No. Taken</th>
+          <th>Curr. Stock</th>
+          <th>Driver</th>
+          <th>Vehicle</th>
+        </tr>
+        <tr>
+          <td>Clorox Wipes</td>
+          <td>1</td>
+          <td>40</td>
+          <td>smithj10</td>
+          <td>103</td>
+        </tr>
+        <tr>
+          <td>ECU Transit Hoodie</td>
+          <td>3</td>
+          <td>10</td>
+          <td>robertsw17</td>
+          <td>N/A</td>
+        </tr>
+      </table>
+    </div>
     <script>
     function openNav() {
       document.getElementById("mySidenav").style.width = "250px";
