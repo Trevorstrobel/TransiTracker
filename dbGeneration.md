@@ -31,10 +31,10 @@ The Item table describes items stocked and tracked by ECU's Transit Department.
 ```sql
 CREATE TABLE `Item` (
 	`ItemID` INT NOT NULL AUTO_INCREMENT,
-	`Name` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Product Name',
+	`Name` VARCHAR(50) NOT NULL COMMENT 'Product Name',
 	`Current_Stock` INT COMMENT 'Number currently in stock',
 	`Reorder_Threshold` INT,
-	`Distributor` VARCHAR CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT 'Where do you get this item?',
+	`Distributor` VARCHAR(30) COMMENT 'Where do you get this item?',
 	PRIMARY KEY (`ItemID`)
 );
 ```
@@ -45,10 +45,10 @@ The Employee table's entries represent an employee of ECU's Transit Department.
 ```sql
 CREATE TABLE `Employee` (
 	`EmployeeID` INT NOT NULL AUTO_INCREMENT,
-	`First_Name` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Employee's first name',
-	`Last_Name` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Employee's last name',
-	`PirateID` VARCHAR(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Employee's Pirate ID. Ex: smithj21@students.ecu.edu',
-	`Phone` CHAR(10) CHARACTER SET ascii COLLATE ascii_bin COMMENT 'Phone Number. Note: this field only accepts 10-digit US phone numbers. ',
+	`First_Name` VARCHAR(30)  NOT NULL COMMENT 'Employee\'s' first name',
+	`Last_Name` VARCHAR(30) NOT NULL COMMENT 'Employees last name',
+	`PirateID` VARCHAR(40) NOT NULL COMMENT 'Employees Pirate ID. Ex: smithj21@students.ecu.edu',
+	`Phone` CHAR(10) COMMENT 'Phone Number. Note: this field only accepts 10-digit US phone numbers. ',
 	PRIMARY KEY (`EmployeeID`)
 );
 ```
@@ -73,12 +73,13 @@ CREATE TABLE `Transaction` (
 
 
 <h4>Login Table </h4>
+
 ```sql
 
 CREATE TABLE `Login` (
 
-	`Username` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT `Employee's log in username`,
-	`Password` VARCHAR(30) CHARSET SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT `Employees login password`,
+	`Username` VARCHAR(30) NOT NULL COMMENT `Employee's log in username`,
+	`Password` VARCHAR(30) NOT NULL COMMENT `Employees login password`,
 	`EmployeeID` INT NOT NULL,
 
 	PRIMARY KEY (`Username`),
