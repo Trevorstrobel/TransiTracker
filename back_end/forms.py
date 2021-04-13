@@ -5,8 +5,8 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 class CreateAccountForm(FlaskForm):
-    
-    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=20)])
+    firstName = StringField('First Name', validators=[DataRequired(), Length(min=1, max=20)])
+    lastName = StringField('Last Name', validators=[DataRequired(), Length(min=1, max=20)])
     email = StringField('Email', validators=[DataRequired(),Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])

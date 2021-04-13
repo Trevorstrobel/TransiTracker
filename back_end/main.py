@@ -23,20 +23,6 @@ bcrypt = Bcrypt(app)
 #bcrypt.check_password_hash(hashed_var, 'thepassword')
 
 @app.route("/")
-@app.route("/dashboard")
-def dashboard():
-    return render_template('dashboard.html')
-
-@app.route("/createAccount", methods=["GET", "POST"])
-def createAccount():
-    form = CreateAccountForm()
-    if form.validate_on_submit():
-        #flash a message on successful create
-        flash(f'Account Created for {form.username.data}.', 'success')
-        return redirect(url_for('login'))
-    return render_template('create_account.html', title='Create Account', form = form)
-
-
 #Login Page
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -48,6 +34,24 @@ def login():
         else:
             flash('Login attempt unsuccessful. Check Email and Password', 'danger')
     return render_template('login.html', title='Login | TransiTracker', form = form)
+
+
+#Create Account Page
+@app.route("/createAccount", methods=["GET", "POST"])
+def createAccount():
+    form = CreateAccountForm()
+    if form.validate_on_submit():
+        #flash a message on successful create
+        flash(f'Account Created for {form.firstName.data} {form.lastName.data}.', 'success')
+        return redirect(url_for('login'))
+    return render_template('create_account.html', title='Create Account', form = form)
+
+
+#Dashboard page
+@app.route("/dashboard")
+def dashboard():
+    return render_template('dashboard.html')
+
 
 #Inventory Page
 @app.route("/inventory")
