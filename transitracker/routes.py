@@ -17,6 +17,8 @@ def login():
         return redirect(url_for('dashboard'))
     
     form = LoginForm()
+
+
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first() #grabs first entry with that email
 
@@ -26,6 +28,12 @@ def login():
             return redirect(url_for('dashboard'))
         else:
             flash('Login attempt unsuccessful. Check Email and Password', 'danger')
+
+
+
+
+
+            
     return render_template('login.html', title='Login', form = form)
 
 
@@ -58,7 +66,6 @@ def createAccount():
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
 
 
 

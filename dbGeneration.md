@@ -21,8 +21,10 @@ Note here, that each line ends with ```;```
 
 ```
 create database transitracker_dev;
-create user ttadmin with encrypted password `[redacted]`;
+create user ttadmin with encrypted password `csci4230`;
 grant all privileges on database transitracker_dev to ttadmin;
+
+\q 
 ```
 
 <h4>Item Table</h4>
