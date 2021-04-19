@@ -3,7 +3,7 @@
 from flask import request, render_template, flash, redirect, url_for
 from transitracker import app, db, bcrypt
 from transitracker.forms import CreateAccountForm, LoginForm
-from transitracker.models import User
+from transitracker.models import Employee, Item, Transaction
 from flask_login import login_user,  logout_user, current_user
 
 
@@ -20,7 +20,7 @@ def login():
 
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first() #grabs first entry with that email
+        user = Employee.query.filter_by(email=form.email.data).first() #grabs first entry with that email
 
         #if the user exists and the password matches the hashed password in the db
         if user and bcrypt.check_password_hash(user.password, form.password.data):
@@ -49,7 +49,7 @@ def createAccount():
         #hash the password from the form to store in the db
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
 
-        user = User(firstName=form.firstName.data, lastName=form.lastName.data, email=form.email.data, password = hashed_password)
+        user = Employee(firstName=form.firstName.data, lastName=form.lastName.data, email=form.email.data, password = hashed_password)
 
         db.session.add(user)
         db.session.commit()
@@ -72,23 +72,35 @@ def logout():
 #Dashboard page
 @app.route("/dashboard")
 def dashboard():
-    return render_template('dashboard.html')
+    #TODO: fetch last 10 transactions and return with render_template
+    #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
+   
+    return render_template('dashboard.html', title ='Dashboard') # alertInv = alertInventory, recentTrans = recentTransactions)
 
 
 #Inventory Page
 @app.route("/inventory")
 def inventory():
-    form = LoginForm()
-    return render_template('login.html', title='Login | TransiTracker', form = form)
+    inventory = Item.query.all()
+    return render_template('inventory.html', title='Inventory', data = inventory)
+
+@app.route("/addItem")
+def addItem():
+    #create add item code here.
+    return redirect(url_for('inventory'))
+
+
+
+
 
 #Transaction Page
 @app.route("/transactions")
 def transactions():
-    form = LoginForm()
-    return render_template('login.html', title='Login | TransiTracker', form = form)
+    transactions = Transaction.query.all()
+    return render_template('transactions.html', title='Transactions', data = transactions)
 
 #Employees Page
 @app.route("/employees")
 def employees():
-    form = LoginForm()
-    return render_template('login.html', title='Login | TransiTracker', form = form) 
+    users = Employee.query.all()
+    return render_template('employees.html', title='Employees', data = users) 

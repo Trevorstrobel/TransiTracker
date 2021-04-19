@@ -4,7 +4,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from transitracker.models import User
+from transitracker.models import Employee
 
 
 #User Registration Form
@@ -21,7 +21,7 @@ class CreateAccountForm(FlaskForm):
 
     #functions
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
+        user = Employee.query.filter_by(email=email.data).first()
         
         #if the user (email) exists, then throw an error
         if user:

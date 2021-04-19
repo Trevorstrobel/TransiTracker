@@ -6,20 +6,48 @@ from flask_login import UserMixin
 
 #session manager
 @login_manager.user_loader
-def loadUser(user_id):
-    return User.query.get(int(user_id))
+def loadUser(employee_id):
+    return Employee.query.get(int(employee_id))
 
 
-#User table with support for sessions
-class User(db.Model, UserMixin):
+
+#Employee table with support for sessions
+class Employee(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String(20), nullable = False)
     lastName = db.Column(db.String(20), nullable = False)
     email = db.Column(db.String(120), unique=True, nullable = False)
     phone = db.Column(db.String(10)) #is this necessary for our users?
     password = db.Column(db.String(60), nullable = False)
+    transactions = db.relationship('Transaction', backref='employee', lazy = True)
 
     def __repr__(self):
-        return f"User('{self.firstName}','{self.lastName}','{self.email}')"
+        return f"Employee('{self.firstName}','{self.lastName}','{self.email}')"
+
+#item table. the main inventory table
+class Item(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(40), unique = True, nullable = False)
+    inStock = db.Column(db.Integer, nullable = True)
+    threshold = db.Column(db.Integer, nullable = True)
+    vendor = db.Column(db.String(40), nullable = True)
+    transactions = db.relationship('Transaction', backref='item', lazy = True)
+
+
+    def __repr__(self):
+        return f"Item('{self.name}','{self.inStock}','{self.threshold}')"
+
+#Transaction table. a Transaction is when a user takes items from the inventory. 
+class Transaction(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable = False)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable = False)
+    num_taken = db.Column(db.Integer, nullable = False)
+    count_before = db.Column(db.Integer, nullable = False)
+
+    def __repr__(self):
+        return f"Transaction('{self.employee_id}', '{self.item_id}','{self.num_taken}', '{self.count_before}')"
+    
+
 
 
