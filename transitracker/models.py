@@ -50,4 +50,8 @@ class Transaction(db.Model):
     
 
 
-
+# The following are lists contaiing the column names for various tables.
+# This may not be the best place for them, but I'm not sure where else I'd put them.
+employeeCols = ['First Name', 'Last Name', 'Email Address']
+itemCols = ['Item Name', 'Number In Stock', 'Reorder Threshold', 'Vendor']
+transactionCols = ['Employee', 'Item Taken', 'Number Taken', 'Stock Before Transaction']

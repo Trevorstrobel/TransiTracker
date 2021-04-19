@@ -3,7 +3,7 @@
 from flask import request, render_template, flash, redirect, url_for
 from transitracker import app, db, bcrypt
 from transitracker.forms import CreateAccountForm, LoginForm
-from transitracker.models import Employee, Item, Transaction
+from transitracker.models import Employee, Item, Transaction, employeeCols
 from flask_login import login_user,  logout_user, current_user
 
 
@@ -102,5 +102,5 @@ def transactions():
 #Employees Page
 @app.route("/employees")
 def employees():
-    users = Employee.query.all()
-    return render_template('employees.html', title='Employees', data = users) 
+    users = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).all()
+    return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users) 
