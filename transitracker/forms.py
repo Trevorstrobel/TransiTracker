@@ -44,3 +44,4 @@ class EmployeeSearchForm(FlaskForm):
     searchStr = StringField('Search')
     #buttons
     searchBtn = SubmitField('Search')
+    clearBtn = SubmitField('Clear')

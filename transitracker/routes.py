@@ -72,11 +72,11 @@ def logout():
 #------------------------------Dashboard Routes--------------------------------
 #Dashboard page
 @app.route("/dashboard")
+def dashboard():
     #redirect user if they're not logged in
     if not(current_user.is_authenticated):
         return redirect(url_for('login'))
-        
-def dashboard():
+
     #TODO: fetch last 10 transactions and return with render_template
     #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
    
@@ -122,12 +122,31 @@ def transactions():
 #Employees Page
 @app.route("/employees", methods=["GET", "POST"])
 def employees():
-    
     #redirect user if they're not logged in
     if not(current_user.is_authenticated):
         return redirect(url_for('login'))
 
-
+    #define the search form
     search = EmployeeSearchForm()
+    
+    #if the user submits a search
+    if search.searchBtn():
+        param = search.searchStr.data #search parameters
+
+        #first we get all entries that match first name, then last and concatenate the lists
+        results = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.firstName.like(param)).all()
+
+        results2 = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.lastName.like(param)).all()
+        
+        #add the two lists together
+        for res in results2:
+            results.append(res)
+
+        #TODO: remove duplicates
+
+        return render_template('employees.html', title= 'Employees', column_html = employeeCols, data_html = results, search = search)
+
+
+
     users = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).all()
     return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users, search = search) 
