@@ -36,3 +36,11 @@ class LoginForm(FlaskForm):
     #buttons
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+
+#Employee Search
+class EmployeeSearchForm(FlaskForm):
+    #fields
+    searchStr = StringField('Search')
+    #buttons
+    searchBtn = SubmitField('Search')

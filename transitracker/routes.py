@@ -2,10 +2,13 @@
 
 from flask import request, render_template, flash, redirect, url_for
 from transitracker import app, db, bcrypt
-from transitracker.forms import CreateAccountForm, LoginForm
+from transitracker.forms import CreateAccountForm, LoginForm, EmployeeSearchForm
 from transitracker.models import Employee, Item, Transaction, employeeCols
 from flask_login import login_user,  logout_user, current_user
 
+
+
+#------------------------------Account Routes--------------------------------
 
 #default page
 @app.route("/", methods=["GET", "POST"])
@@ -16,12 +19,13 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
     
-    form = LoginForm()
+    form = LoginForm() #loads the form from forms.py
 
 
     if form.validate_on_submit():
         user = Employee.query.filter_by(email=form.email.data).first() #grabs first entry with that email
 
+        #TODO: Flask throws an error when the wrong password is given instead of just saying "wrong password".
         #if the user exists and the password matches the hashed password in the db
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
@@ -29,11 +33,6 @@ def login():
         else:
             flash('Login attempt unsuccessful. Check Email and Password', 'danger')
 
-
-
-
-
-            
     return render_template('login.html', title='Login', form = form)
 
 
@@ -44,7 +43,7 @@ def createAccount():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
 
-    form = CreateAccountForm()
+    form = CreateAccountForm() #loads the form from forms.py
     if form.validate_on_submit():
         #hash the password from the form to store in the db
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -69,8 +68,14 @@ def logout():
 
 
 
+
+#------------------------------Dashboard Routes--------------------------------
 #Dashboard page
 @app.route("/dashboard")
+    #redirect user if they're not logged in
+    if not(current_user.is_authenticated):
+        return redirect(url_for('login'))
+        
 def dashboard():
     #TODO: fetch last 10 transactions and return with render_template
     #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
@@ -78,29 +83,51 @@ def dashboard():
     return render_template('dashboard.html', title ='Dashboard') # alertInv = alertInventory, recentTrans = recentTransactions)
 
 
+#------------------------------Inventory Routes--------------------------------
 #Inventory Page
 @app.route("/inventory")
 def inventory():
+    #redirect user if they're not logged in
+    if not(current_user.is_authenticated):
+        return redirect(url_for('login'))
+
     inventory = Item.query.all()
     return render_template('inventory.html', title='Inventory', data = inventory)
 
 @app.route("/addItem")
 def addItem():
+    #redirect user if they're not logged in
+    if not(current_user.is_authenticated):
+        return redirect(url_for('login'))
+
     #create add item code here.
     return redirect(url_for('inventory'))
 
 
 
 
-
+#------------------------------Transaction Routes--------------------------------
 #Transaction Page
 @app.route("/transactions")
 def transactions():
+    #redirect user if they're not logged in
+    if not(current_user.is_authenticated):
+        return redirect(url_for('login'))
+
     transactions = Transaction.query.all()
     return render_template('transactions.html', title='Transactions', data = transactions)
 
+
+#------------------------------Employee Routes--------------------------------
 #Employees Page
-@app.route("/employees")
+@app.route("/employees", methods=["GET", "POST"])
 def employees():
+    
+    #redirect user if they're not logged in
+    if not(current_user.is_authenticated):
+        return redirect(url_for('login'))
+
+
+    search = EmployeeSearchForm()
     users = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).all()
-    return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users) 
+    return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users, search = search) 

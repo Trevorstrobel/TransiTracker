@@ -1,7 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
-<h3>Employees</h3>
 
+<h3>Employees</h3>
+<form method="POST" action="">
+    <div class="form-group search-group">
+        {{search.searchStr.label(class="form-control-label")}}
+        {{ search.searchStr(class="form-control form-control-lg") }}
+        {{ search.searchBtn(class="btn btn-outline-info")}}
+    </div>
+</form>
 
 <table class="table">
     <thead>
@@ -17,6 +24,9 @@
                 {% for data in row %} <!--for every piece of data in a row, make a new cell-->
                     <td>{{ data }}</td> <!-- populate cell-->
                 {% endfor %}
+                <td class = "admin"> <!-- Cell for the edit button. will be only visible to admins-->
+                    <button class="btn btn-primary" type="submit">Edit</button>
+                </td>
             </tr>
 
         {% endfor %}
