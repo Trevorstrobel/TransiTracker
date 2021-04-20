@@ -128,8 +128,10 @@ def employees():
 
     #define the search form
     search = EmployeeSearchForm()
+    #Define Default search params (All employees)
+    users = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).all()
     
-    #if the user submits a search
+    #if the user submits a search, search the db for users with first or last name that matches.
     if search.validate_on_submit(): #check for form validation (in this case, just need any input)
         
         if search.searchBtn.data:  # if the searchBtn is pressed...
@@ -137,19 +139,22 @@ def employees():
             param = search.searchStr.data #search parameters
 
             #first we get all entries that match first name, then last name.
-            results = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.firstName.like(param)).all()
-            results2 = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.lastName.like(param)).all()
+            users = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.firstName.like(param)).all()
+            users2 = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.lastName.like(param)).all()
             
             #add the two lists together
-            for res in results2:
-                results.append(res)
+            for user in users2:
+                users.append(user)
 
             #TODO: remove duplicates if there's time. 
             
-            #return template with returned search data.
-            return render_template('employees.html', title= 'Employees', column_html = employeeCols, data_html = results, search = search)
+            
 
     
 
-    users = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).all()
+    return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users, search = search) 
+
+#Employee Edit Page
+@app.route("/editEmployee", methods=["GET", "POST"])
+def editEmployee():
     return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users, search = search) 
