@@ -41,7 +41,6 @@ class LoginForm(FlaskForm):
 #Employee Search
 class EmployeeSearchForm(FlaskForm):
     #fields
-    searchStr = StringField('Search')
+    searchStr = StringField('Search', validators=[DataRequired()])
     #buttons
     searchBtn = SubmitField('Search')
-    clearBtn = SubmitField('Clear')

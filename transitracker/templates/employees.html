@@ -3,11 +3,12 @@
 
 <h3>Employees</h3>
 <form method="POST" action="">
+    {{search.hidden_tag()}}
     <div class="form-group search-group">
-        {{search.searchStr.label(class="form-control-label")}}
+        {{ search.searchStr.label(class="form-control-label")}}
         {{ search.searchStr(class="form-control form-control-lg") }}
         {{ search.searchBtn(class="btn btn-outline-info")}}
-        {{ search.clearBtn(class="btn btn-outline-danger")}}
+        <a class="btn btn-outline-danger" href="{{ url_for('employees') }}">Clear</a>
     </div>
 </form>
 
