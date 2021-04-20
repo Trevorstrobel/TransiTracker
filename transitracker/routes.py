@@ -2,8 +2,8 @@
 
 from flask import request, render_template, flash, redirect, url_for
 from transitracker import app, db, bcrypt
-from transitracker.forms import CreateAccountForm, LoginForm, EmployeeSearchForm
-from transitracker.models import Employee, Item, Transaction, employeeCols
+from transitracker.forms import CreateAccountForm, LoginForm, EmployeeSearchForm, CreateItemForm
+from transitracker.models import Employee, Item, Transaction, employeeCols, itemCols, transactionCols
 from flask_login import login_user,  logout_user, current_user
 
 
@@ -91,17 +91,34 @@ def inventory():
     if not(current_user.is_authenticated):
         return redirect(url_for('login'))
 
-    inventory = Item.query.all()
-    return render_template('inventory.html', title='Inventory', data = inventory)
+    inventory = Item.query.with_entities(Item.name, Item.inStock, Item.threshold, Item.vendor).all()
+    print(inventory)
+    return render_template('inventory.html', title='Inventory', column_html=itemCols,  data_html = inventory)
 
-@app.route("/addItem")
-def addItem():
+@app.route("/createItem", methods=['GET', 'POST'])
+def createItem():
     #redirect user if they're not logged in
     if not(current_user.is_authenticated):
         return redirect(url_for('login'))
+    #load form
+    form = CreateItemForm()
 
-    #create add item code here.
-    return redirect(url_for('inventory'))
+    if form.validate_on_submit():
+        #submit the data to the database
+        #create item object that represents a row in the Item table. 
+        item = Item(name=form.name.data, inStock=form.inStock.data, threshold=form.threshold.data, vendor=form.vendor.data)
+
+        #add and commit the new item object.
+        db.session.add(item)
+        db.session.commit()
+
+        #flash a message on successful create
+        flash(f'Item  {form.name.data} created. ', 'success')
+        return redirect(url_for('inventory'))
+    
+
+
+    return render_template('create_item.html', title='Create Item', form = form)
 
 
 
@@ -151,7 +168,7 @@ def employees():
             
 
     
-
+    print(users)
     return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users, search = search) 
 
 #Employee Edit Page

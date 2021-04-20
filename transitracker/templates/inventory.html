@@ -1,4 +1,29 @@
 {% extends "layout.html" %}
 {% block content %}
 <h3>Inventory</h3>
+<a class="btn btn-primary" href="{{ url_for('createItem') }}" role="button">Create Item</a>
+
+
+<table class="table">
+    <thead>
+        <tr> <!-- This block adds column names to the table-->
+            {% for item in column_html %}
+                <th>{{item}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in data_html %} <!-- for row in query response, make a new row-->
+            <tr>
+                {% for data in row %} <!--for every piece of data in a row, make a new cell-->
+                    <td>{{ data }}</td> <!-- populate cell-->
+                {% endfor %}
+                <td class = "admin"> <!-- Cell for the edit button. will be only visible to admins-->
+                    <button class="btn btn-primary" type="submit">Edit</button>
+                </td>
+            </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock content %}

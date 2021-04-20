@@ -1,4 +1,79 @@
 {% extends "layout.html" %}
 {% block content %}
-<h3>Create Item</h3>
+
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Create Item</legend>
+            
+            <!--Item Name-->
+            <div class="form-group">
+                {{ form.name.label(class="form-control-label") }}
+
+                {% if form.name.errors %}
+                    {{ form.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+            <!--Number In Stock -->
+            <div class="form-group">
+                {{ form.inStock.label(class="form-control-label") }}
+
+                {% if form.inStock.errors %}
+                    {{ form.inStock(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.inStock.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.inStock(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <!--Reorder Threshold -->
+            <div class="form-group">
+                {{ form.threshold.label(class="form-control-label") }}
+
+                {% if form.threshold.errors %}
+                    {{ form.threshold(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.threshold.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.threshold(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <!--Vendor -->
+            <div class="form-group">
+                {{ form.vendor.label(class="form-control-label") }}
+
+                {% if form.vendor.errors %}
+                    {{ form.vendor(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.vendor.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.vendor(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{form.submit(class="btn btn-outline-info")}}
+        </div>
+    </form>
+</div>
+
 {% endblock content %}

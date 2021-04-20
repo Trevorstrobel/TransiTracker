@@ -2,7 +2,7 @@
 #Date:                  4/13/21
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from transitracker.models import Employee
 
@@ -53,3 +53,6 @@ class CreateItemForm(FlaskForm):
     inStock = IntegerField('Number In Stock', validators=[DataRequired()])
     threshold = IntegerField('Reorder Threshold', validators=[DataRequired()])
     vendor = StringField('Vendor')
+
+    #buttons
+    submit = SubmitField('Create')
