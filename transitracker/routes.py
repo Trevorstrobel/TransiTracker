@@ -164,7 +164,7 @@ def employees():
                 users.append(user)
 
             #TODO: remove duplicates if there's time. 
-            
+            #TODO: maybe use REGEX
             
 
     
