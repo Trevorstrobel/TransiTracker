@@ -44,3 +44,12 @@ class EmployeeSearchForm(FlaskForm):
     searchStr = StringField('Search', validators=[DataRequired()])
     #buttons
     searchBtn = SubmitField('Search')
+
+
+#Create Item Form
+class CreateItemForm(FlaskForm):
+    #fields
+    name = StringField('Item Name', validators=[DataRequired(), Length(min=1, max=30)])
+    inStock = IntegerField('Number In Stock', validators=[DataRequired()])
+    threshold = IntegerField('Reorder Threshold', validators=[DataRequired()])
+    vendor = StringField('Vendor')
