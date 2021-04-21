@@ -27,6 +27,24 @@ class CreateAccountForm(FlaskForm):
         if user:
             raise ValidationError('There is already an account registered with that email address.')
 
+
+#Employee Edit Form
+class EditAccountForm(FlaskForm):
+    #fields
+    firstName = StringField('First Name', validators=[DataRequired(), Length(min=1, max=20)])
+    lastName = StringField('Last Name', validators=[DataRequired(), Length(min=1, max=20)])
+    email = StringField('Email', render_kw={'readonly': True})
+    #buttons
+    submit = SubmitField('Edit Account')
+
+# Change Password Form
+class ChangePasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    #buttons
+    submit = SubmitField('Change Password')
+
+
 #Login Form
 class LoginForm(FlaskForm):
     #fields

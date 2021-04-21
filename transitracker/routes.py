@@ -140,14 +140,14 @@ def createItem():
 
 @app.route("/editItem/<int:item_id>", methods=['GET', 'POST'])
 def editItem(item_id):
-    item = Item.query.get_or_404(item_id)
+    item = Item.query.get_or_404(item_id) #returns 404 if item doesnt exist.
     
-    #create form object and set existing values from database.
+    #create form object 
     form = EditItemForm()
 
     
 
-    #if the user submits changes
+    #if the user submits changes, update the DB.
     if form.validate_on_submit():
         item.name = form.name.data
         item.inStock = form.inStock.data
@@ -187,7 +187,7 @@ def employees():
     #define the search form
     search = EmployeeSearchForm()
     #Define Default search params (All employees)
-    users = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).all()
+    users = Employee.query.with_entities(Employee.id, Employee.firstName, Employee.lastName, Employee.email).all()
     
     #if the user submits a search, search the db for users with first or last name that matches.
     if search.validate_on_submit(): #check for form validation (in this case, just need any input)
@@ -213,7 +213,30 @@ def employees():
     return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users, search = search) 
 
 #Employee Edit Page
-@app.route("/editEmployee", methods=["GET", "POST"])
+@app.route("/editEmployee/<int:user_id>", methods=["GET", "POST"])
 @login_required
-def editEmployee():
-    return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users, search = search) 
+def editEmployee(user_id):
+    user = Employee.query.get_or_404(user_id) #returns 404 if the user does not exist.
+
+    form = EditAccountForm() #create form object
+
+    if form.validate_on_submit():
+        user.firstName = form.firstName.data
+        user.lastName = form.lastName.data
+        user.email = form.email.data
+
+        #commit to db
+        db.session.commit()
+        flash('Employee account has been updated.', 'success')
+        return redirect(url_for('employees'))
+    
+    elif request.method == 'GET': #populates form fields on "GET" method
+        form.firstName.data = user.firstName
+        form.lastName.data = user.lastName
+        form.email.data = user.email
+
+
+
+
+
+    return render_template('edit_account.html', title=user.email, user=user, form=form) 
