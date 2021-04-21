@@ -25,6 +25,7 @@ bcrypt = Bcrypt(app)
 
 #login session manager
 login_manager = LoginManager(app)
+login_manager.login_view = 'login'
 
 
 

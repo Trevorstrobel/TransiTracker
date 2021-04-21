@@ -4,7 +4,7 @@ from flask import request, render_template, flash, redirect, url_for
 from transitracker import app, db, bcrypt
 from transitracker.forms import CreateAccountForm, LoginForm, EmployeeSearchForm, CreateItemForm
 from transitracker.models import Employee, Item, Transaction, employeeCols, itemCols, transactionCols
-from flask_login import login_user,  logout_user, current_user
+from flask_login import login_user,  logout_user, current_user, login_required
 
 
 
@@ -39,9 +39,6 @@ def login():
 #Create Account Page
 @app.route("/createAccount", methods=["GET", "POST"])
 def createAccount():
-    #redirect when logged in
-    if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
 
     form = CreateAccountForm() #loads the form from forms.py
     if form.validate_on_submit():
@@ -72,11 +69,9 @@ def logout():
 #------------------------------Dashboard Routes--------------------------------
 #Dashboard page
 @app.route("/dashboard")
+@login_required
 def dashboard():
-    #redirect user if they're not logged in
-    if not(current_user.is_authenticated):
-        return redirect(url_for('login'))
-
+ 
     #TODO: fetch last 10 transactions and return with render_template
     #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
 
@@ -111,10 +106,9 @@ def dashboard():
 #------------------------------Inventory Routes--------------------------------
 #Inventory Page
 @app.route("/inventory")
+@login_required
 def inventory():
-    #redirect user if they're not logged in
-    if not(current_user.is_authenticated):
-        return redirect(url_for('login'))
+ 
 
     inventory = Item.query.with_entities(Item.name, Item.inStock, Item.threshold, Item.vendor).all()
     print(inventory)
@@ -146,15 +140,15 @@ def createItem():
     return render_template('create_item.html', title='Create Item', form = form)
 
 
-
+@app.route("/editItem", methods=['GET', 'POST'])
+def editItem():
+    return
 
 #------------------------------Transaction Routes--------------------------------
 #Transaction Page
 @app.route("/transactions")
+@login_required
 def transactions():
-    #redirect user if they're not logged in
-    if not(current_user.is_authenticated):
-        return redirect(url_for('login'))
 
     transactions = Transaction.query.all()
     return render_template('transactions.html', title='Transactions', data = transactions)
@@ -163,10 +157,9 @@ def transactions():
 #------------------------------Employee Routes--------------------------------
 #Employees Page
 @app.route("/employees", methods=["GET", "POST"])
+@login_required
 def employees():
-    #redirect user if they're not logged in
-    if not(current_user.is_authenticated):
-        return redirect(url_for('login'))
+    
 
     #define the search form
     search = EmployeeSearchForm()
@@ -198,5 +191,6 @@ def employees():
 
 #Employee Edit Page
 @app.route("/editEmployee", methods=["GET", "POST"])
+@login_required
 def editEmployee():
     return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users, search = search) 
