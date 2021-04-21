@@ -15,11 +15,12 @@
     <tbody>
         {% for row in data_html %} <!-- for row in query response, make a new row-->
             <tr>
-                {% for data in row %} <!--for every piece of data in a row, make a new cell-->
+                {% for data in (row | list)[1:] %} <!--for every piece of data in a row (except the first(the id)), make a new cell-->
                     <td>{{ data }}</td> <!-- populate cell-->
                 {% endfor %}
                 <td class = "admin"> <!-- Cell for the edit button. will be only visible to admins-->
-                    <button class="btn btn-primary" type="submit">Edit</button>
+                    <a class="btn btn-primary" href="{{ url_for('editItem', item_id=row[0])}}" role="button">Edit</a>
+
                 </td>
             </tr>
 

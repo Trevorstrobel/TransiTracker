@@ -56,3 +56,14 @@ class CreateItemForm(FlaskForm):
 
     #buttons
     submit = SubmitField('Create')
+
+#Edit Item Form
+class EditItemForm(FlaskForm):
+    #fields
+    name = StringField('Item Name', validators=[DataRequired(), Length(min=1, max=30)])
+    inStock = IntegerField('Number In Stock', validators=[DataRequired()])
+    threshold = IntegerField('Reorder Threshold', validators=[DataRequired()])
+    vendor = StringField('Vendor')
+
+    #buttons
+    submit = SubmitField('Submit Edit')

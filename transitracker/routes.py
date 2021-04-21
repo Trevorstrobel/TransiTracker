@@ -2,7 +2,7 @@
 
 from flask import request, render_template, flash, redirect, url_for
 from transitracker import app, db, bcrypt
-from transitracker.forms import CreateAccountForm, LoginForm, EmployeeSearchForm, CreateItemForm
+from transitracker.forms import *
 from transitracker.models import Employee, Item, Transaction, employeeCols, itemCols, transactionCols
 from flask_login import login_user,  logout_user, current_user, login_required
 
@@ -109,9 +109,7 @@ def dashboard():
 @login_required
 def inventory():
  
-
-    inventory = Item.query.with_entities(Item.name, Item.inStock, Item.threshold, Item.vendor).all()
-    print(inventory)
+    inventory = Item.query.with_entities(Item.id, Item.name, Item.inStock, Item.threshold, Item.vendor).all()
     return render_template('inventory.html', title='Inventory', column_html=itemCols,  data_html = inventory)
 
 @app.route("/createItem", methods=['GET', 'POST'])
@@ -140,9 +138,34 @@ def createItem():
     return render_template('create_item.html', title='Create Item', form = form)
 
 
-@app.route("/editItem", methods=['GET', 'POST'])
-def editItem():
-    return
+@app.route("/editItem/<int:item_id>", methods=['GET', 'POST'])
+def editItem(item_id):
+    item = Item.query.get_or_404(item_id)
+    
+    #create form object and set existing values from database.
+    form = EditItemForm()
+
+    
+
+    #if the user submits changes
+    if form.validate_on_submit():
+        item.name = form.name.data
+        item.inStock = form.inStock.data
+        item.threshold = form.threshold.data
+        item.vendor = form.vendor.data
+
+        #commit to databse
+        db.session.commit()
+        flash('The item has been updated', 'success')
+        return redirect(url_for('inventory'))
+
+    elif request.method == 'GET': #populates fields on the page on 'GET' method
+        form.name.data = item.name
+        form.inStock.data = item.inStock
+        form.threshold.data = item.threshold
+        form.vendor.data = item.vendor
+
+    return render_template('edit_item.html', title=item.name, item=item, form=form)
 
 #------------------------------Transaction Routes--------------------------------
 #Transaction Page
