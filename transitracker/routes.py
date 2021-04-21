@@ -79,8 +79,33 @@ def dashboard():
 
     #TODO: fetch last 10 transactions and return with render_template
     #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
+
+    # Here we retrieve the inventory. 
+    inventory = Item.query.with_entities(Item.name, Item.inStock, Item.threshold, Item.vendor).all()
+
+    #alertInv will hold the items that need to be brought to the users attention,
+    # that is, items whose stock is lower than the reorder threshold or items whose
+    # stock is nearing the threshold.
+    alertInv = []
+
+
+    for item in inventory: 
+        difference = item.inStock - item.threshold # used to determine if an item will need reordering soon
+        twentyP = item.threshold * 0.2 # represents 20% of the minimum required stock. 
+
+        #add items whos stock is below the threshold
+        if item.inStock <= item.threshold:
+            alertInv.append(item) 
+            inventory.remove(item) #remove the item from the local inventory list to prevent dupes.
+
+        #add items whose stock is less than 20% of the threshold above the threshold. (will need to be reordered soon.)    
+        elif (difference > 0 and difference <= twentyP):
+            alertInv.append(item)
+            inventory.remove(item) #remove the item from the local inventory list to prevent dupes.   
+    
+
    
-    return render_template('dashboard.html', title ='Dashboard') # alertInv = alertInventory, recentTrans = recentTransactions)
+    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols) # alertInv = alertInventory, recentTrans = recentTransactions)
 
 
 #------------------------------Inventory Routes--------------------------------

@@ -1,6 +1,50 @@
 {% extends "layout.html" %}
 {% block content %}
+<h3>Dashboard</h3>
 
-<h1>Dashboard</h1>
+<!-- Item Alert Table: This table shows those items who are below or nearing the reorder threshold.-->
 
+<table class="table">
+    <h4>Reorder Alerts</h4>
+    <thead>
+        <tr> <!-- This block adds column names to the table-->
+            {% for item in inv_column_html %}
+                <th>{{item}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in inv_data_html %} <!-- for row in query response, make a new row-->
+            <tr>
+                {% for data in row %} <!--for every piece of data in a row, make a new cell-->
+                    <td>{{ data }}</td> <!-- populate cell-->
+                {% endfor %}
+            </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+<table class="table">
+    <h4>Recent Transactions</h4>
+    <thead>
+        <tr> <!-- This block adds column names to the table-->
+            {% for item in trans_column_html %}
+                <th>{{item}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in trans_data_html %} <!-- for row in query response, make a new row-->
+            <tr>
+                {% for data in row %} <!--for every piece of data in a row, make a new cell-->
+                    <td>{{ data }}</td> <!-- populate cell-->
+                {% endfor %}
+            </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock content %}
