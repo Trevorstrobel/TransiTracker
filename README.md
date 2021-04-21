@@ -129,19 +129,11 @@ Finally, we quit ```psql```:
 You should now be back at your shell, indicated by the ```$ ``` character in Bash.
 
 
-<h4>Create Database Tables</h4>
 
-Now that PostgreSQL is installed, we can create the requisite database tables.
-within the ```Transitracker``` directory, run the following command:
 
-```
-$ python3 createTables.py
-```
-
-After the tables are created, you've got the application installed and you're ready to run it.
-
-<h4>Running the Application</h4>
-
+---
+Running the Application
+---
 **For Devs:**To run the application in developer mode, run the following command:
 
 ```

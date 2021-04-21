@@ -8,9 +8,14 @@ from flask_login import login_user,  logout_user, current_user, login_required
 
 
 
-#checks to see if tables are created in the databse
+#creates tables if they're not already there.
 
-
+from transitracker import db
+try:
+    db.create_all()
+    print("Tables created successfully.")
+except:
+    print("Table creation failed.")
 
 
 
