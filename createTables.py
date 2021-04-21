@@ -1,2 +1,6 @@
 from transitracker import db
-db.create_all()
+try:
+    db.create_all()
+    print("Tables created successfully.")
+except:
+    print("Table creation failed.")
