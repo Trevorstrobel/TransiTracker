@@ -22,7 +22,9 @@ Date:                  4/21/21
                 {% for data in (row | list)[1:4] %} <!--for every piece of data in a row (except the first(the id)), make a new cell-->
                     <td>{{ data }}</td> <!-- populate cell-->
                 {% endfor %}
-                {% if row[4] != '' %} <!--checks to see if a vendor is listed-->
+
+                <!-- Vendor Section-->
+                {% if row[4] != '' %} <!--checks to see if a vendor name is listed-->
                     {% if row[5] != '' %} <!-- checks if there is a url associated-->
                     <td>
                         <a href={{row[5]}}>{{ row[4] }}</a> <!--takes the user to the specific page-->
@@ -33,9 +35,15 @@ Date:                  4/21/21
                     </td>
                     {% endif %} 
                 {%  else %} <!--keeps the table aligned if there isn't a vendor-->
+                    {% if row[5] != '' %}
+                    <td>
+                        <a href={{row[5]}}>Link</a> <!--takes the user to the specific page-->
+                    </td>
+                    {%  else %}
                     <td>
                         <p></p>
                     </td>
+                    {% endif %}
                 {% endif%}
                 <td class = "admin"> <!-- Cell for the edit button. will be only visible to admins-->
                     <a class="btn btn-primary" href="{{ url_for('editItem', item_id=row[0])}}" role="button">Edit</a>
