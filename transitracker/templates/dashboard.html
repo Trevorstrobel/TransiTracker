@@ -20,9 +20,32 @@ Date:                  4/21/21
     <tbody>
         {% for row in inv_data_html %} <!-- for row in query response, make a new row-->
             <tr>
-                {% for data in row %} <!--for every piece of data in a row, make a new cell-->
+                {% for data in (row | list)[0:3] %} <!--for every piece of data in a row (except the first(the id)), make a new cell-->
                     <td>{{ data }}</td> <!-- populate cell-->
                 {% endfor %}
+
+                <!-- Vendor Section-->
+                {% if row[4] != '' %} <!--checks to see if a vendor name is listed-->
+                    {% if row[5] != '' %} <!-- checks if there is a url associated-->
+                    <td>
+                        <a href={{row[4]}}>{{ row[3] }}</a> <!--takes the user to the specific page-->
+                    </td>
+                    {% else%}
+                    <td>
+                        <p>{{ row[3] }}</p> <!---->
+                    </td>
+                    {% endif %} 
+                {%  else %} <!--keeps the table aligned if there isn't a vendor-->
+                    {% if row[4] != '' %}
+                    <td>
+                        <a href={{row[4]}}>Link</a> <!--takes the user to the specific page-->
+                    </td>
+                    {%  else %}
+                    <td>
+                        <p></p>
+                    </td>
+                    {% endif %}
+                {% endif%}
             </tr>
 
         {% endfor %}
