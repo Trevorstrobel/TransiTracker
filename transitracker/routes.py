@@ -5,6 +5,7 @@ from transitracker import app, db, bcrypt
 from transitracker.forms import *
 from transitracker.models import Employee, Item, Transaction, employeeCols, itemCols, transactionCols
 from flask_login import login_user,  logout_user, current_user, login_required
+import sqlalchemy
 
 
 
@@ -29,7 +30,7 @@ def login():
     #redirect when logged in
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
-    
+
     form = LoginForm() #loads the form from forms.py
 
 
@@ -58,7 +59,7 @@ def createAccount():
 
         if Employee.query.first() is None:
             print('first user')
-            user = Employee(firstName=form.firstName.data, lastName=form.lastName.data, email=form.email.data, password = hashed_password, privilege=1)
+            user = Employee(firstName=form.firstName.data, lastName=form.lastName.data, email=form.email.data, password = hashed_password)
         else:
             user = Employee(firstName=form.firstName.data, lastName=form.lastName.data, email=form.email.data, password = hashed_password)
 
@@ -87,11 +88,11 @@ def logout():
 @app.route("/dashboard")
 @login_required
 def dashboard():
- 
+
     #TODO: fetch last 10 transactions and return with render_template
     #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
 
-    # Here we retrieve the inventory. 
+    # Here we retrieve the inventory.
     inventory = Item.query.with_entities(Item.name, Item.inStock, Item.threshold, Item.vendorName, Item.vendorURL).all()
 
     #alertInv will hold the items that need to be brought to the users attention,
@@ -100,22 +101,22 @@ def dashboard():
     alertInv = []
 
 
-    for item in inventory: 
+    for item in inventory:
         difference = item.inStock - item.threshold # used to determine if an item will need reordering soon
-        twentyP = item.threshold * 0.2 # represents 20% of the minimum required stock. 
+        twentyP = item.threshold * 0.2 # represents 20% of the minimum required stock.
 
         #add items whos stock is below the threshold
         if item.inStock <= item.threshold:
-            alertInv.append(item) 
+            alertInv.append(item)
             inventory.remove(item) #remove the item from the local inventory list to prevent dupes.
 
-        #add items whose stock is less than 20% of the threshold above the threshold. (will need to be reordered soon.)    
+        #add items whose stock is less than 20% of the threshold above the threshold. (will need to be reordered soon.)
         elif (difference > 0 and difference <= twentyP):
             alertInv.append(item)
-            inventory.remove(item) #remove the item from the local inventory list to prevent dupes.   
-    
+            inventory.remove(item) #remove the item from the local inventory list to prevent dupes.
 
-   
+
+
     return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols) # alertInv = alertInventory, recentTrans = recentTransactions)
 
 
@@ -124,7 +125,7 @@ def dashboard():
 @app.route("/inventory")
 @login_required
 def inventory():
- 
+
     inventory = Item.query.with_entities(Item.id, Item.name, Item.inStock, Item.threshold, Item.vendorName, Item.vendorURL).all()
     return render_template('inventory.html', title='Inventory', column_html=itemCols,  data_html = inventory)
 
@@ -138,9 +139,9 @@ def createItem():
 
     if form.validate_on_submit():
         #submit the data to the database
-        #create item object that represents a row in the Item table. 
-        item = Item(name=form.name.data, inStock=form.inStock.data, 
-                    threshold=form.threshold.data, vendorName=form.vendorName.data, 
+        #create item object that represents a row in the Item table.
+        item = Item(name=form.name.data, inStock=form.inStock.data,
+                    threshold=form.threshold.data, vendorName=form.vendorName.data,
                     vendorURL=form.vendorURL.data)
 
         #add and commit the new item object.
@@ -150,7 +151,7 @@ def createItem():
         #flash a message on successful create
         flash(f'Item  {form.name.data} created. ', 'success')
         return redirect(url_for('inventory'))
-    
+
 
 
     return render_template('create_item.html', title='Create Item', form = form)
@@ -159,11 +160,11 @@ def createItem():
 @app.route("/editItem/<int:item_id>", methods=['GET', 'POST'])
 def editItem(item_id):
     item = Item.query.get_or_404(item_id) #returns 404 if item doesnt exist.
-    
-    #create form object 
+
+    #create form object
     form = EditItemForm()
 
-    
+
 
     #if the user submits changes, update the DB.
     if form.validate_on_submit():
@@ -184,10 +185,8 @@ def editItem(item_id):
         form.threshold.data = item.threshold
         form.vendorName.data = item.vendorName
         form.vendorURL.data = item.vendorURL
-    
-    priv = False
-    if current_user.privilege == 1:
-        priv = True
+
+
 
     return render_template('edit_item.html', title=item.name, item=item, form=form, priv=priv)
 
@@ -199,6 +198,40 @@ def transactions():
 
     transactions = Transaction.query.all()
     return render_template('transactions.html', title='Transactions', data = transactions)
+
+
+
+
+@app.route("/takeItem", methods=['GET', 'POST'])
+def takeItem():
+
+    form = CreateTransactionForm()
+
+    if form.validate_on_submit():
+        #Grab the item from the item ID
+
+
+        item = Item.query.with_entities(Item.name, Item.inStock).first()
+
+
+        #Remove the number taken from the database
+
+        item.inStock = item.inStock - form.num_taken.data
+
+#         Transaction = Transaction(employee_id = form.employee_id.data, item_id = form.item_id.data, num_taken = form.num_taken.data, count_before = self.inStock.data - form.inStock.data)
+        db.session.commit()
+        flash('The transaction has been made', 'success')
+        return redirect(url_for('inventory'))
+
+
+#         db.session.add(Transaction)
+#         db.session.commit()
+
+
+
+
+    return render_template('create_Transaction.html', title='Create Transaction', form = form)
+
 
 
 #------------------------------Employee Routes--------------------------------
@@ -230,11 +263,7 @@ def employees():
 
             #TODO: remove duplicates if there's time. 
             #TODO: maybe use REGEX
-            
-    priv = False #default privilege value
-    
-    if current_user.privilege == 1:
-        priv = True
+
 
     
     return render_template('employees.html', title='Employees', 
@@ -271,8 +300,6 @@ def editEmployee(user_id):
         form.lastName.data = user.lastName
         form.email.data = user.email
 
-        if current_user.id == user.id or current_user.privilege == 1:
-            current = True
 
 
 

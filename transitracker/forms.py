@@ -72,8 +72,6 @@ class CreateItemForm(FlaskForm):
     name = StringField('Item Name', validators=[DataRequired(), Length(min=1, max=30)])
     inStock = IntegerField('Number In Stock', validators=[DataRequired()])
     threshold = IntegerField('Reorder Threshold', validators=[DataRequired()])
-    vendorName = StringField('Vendor Name (optional)')
-    vendorURL = StringField('Vendor URL (optional)', validators=[Optional(), URL()])
 
     #buttons
     submit = SubmitField('Create')
@@ -84,9 +82,17 @@ class EditItemForm(FlaskForm):
     name = StringField('Item Name', validators=[DataRequired(), Length(min=1, max=30)])
     inStock = IntegerField('Number In Stock', validators=[DataRequired()])
     threshold = IntegerField('Reorder Threshold', validators=[DataRequired()])
-    vendorName = StringField('Vendor Name (optional)', validators=[Optional()])
-    vendorURL = StringField('Vendor URL (optional)', validators=[Optional(), URL()])
 
     #buttons
     submit = SubmitField('Submit Edit')
     delete = SubmitField('Delete Item')
+
+
+class CreateTransactionForm(FlaskForm):
+    #fields
+    name = StringField('Item Name', validators=[DataRequired(), Length(min=1, max=30)])
+    num_taken = IntegerField('Number In Stock', validators=[DataRequired()])
+
+
+    #buttons
+    submit = SubmitField('Create')
