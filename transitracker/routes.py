@@ -171,6 +171,7 @@ def editItem(item_id):
         item.inStock = form.inStock.data
         item.threshold = form.threshold.data
         item.vendorName = form.vendorName.data
+        item.vendorURL = form.vendorURL.data
 
         #commit to databse
         db.session.commit()
@@ -181,9 +182,14 @@ def editItem(item_id):
         form.name.data = item.name
         form.inStock.data = item.inStock
         form.threshold.data = item.threshold
-        form.vendor.data = item.vendor
+        form.vendorName.data = item.vendorName
+        form.vendorURL.data = item.vendorURL
+    
+    priv = False
+    if current_user.privilege == 1:
+        priv = True
 
-    return render_template('edit_item.html', title=item.name, item=item, form=form)
+    return render_template('edit_item.html', title=item.name, item=item, form=form, priv=priv)
 
 #------------------------------Transaction Routes--------------------------------
 #Transaction Page

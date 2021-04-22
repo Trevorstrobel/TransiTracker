@@ -1,3 +1,11 @@
+body {
+  height: 100vh;
+}
+
+main .container {
+  background-color: #ffffff;
+  height: 100%;
+}
 .site-header{
     background: #582C83;
     color: #333333;
@@ -24,3 +32,5 @@
   .account-heading {
     font-size: 2.5rem;
   }
+
+ 

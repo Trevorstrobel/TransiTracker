@@ -20,13 +20,14 @@ Date:                  4/21/21
         <title>TransiTracker</title>
     {% endif %}
 </head>
-<body>
+<body class="bus-background" style="background-image: url('../static/transit.jpg'); background-repeat: no-repeat;
+background-attachment: fixed; background-size: cover; height:95vh;">
     <header class="site-header">
-      <nav class="navbar navbar-expand-md  bg-steel fixed-top">
+      <nav class="navbar navbar-expand-md   fixed-top" style="background-color: #9e9e9e;">
         <div class="container">
           <a class="navbar-brand mr-4" href="/">TransiTracker</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+          <button class="navbar-toggler" type="button" style="color: black" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" ></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
@@ -49,9 +50,11 @@ Date:                  4/21/21
         </div>
       </nav>
     </header> 
-    <main role="main" class="container">
-      <div class="row">
-        <div class="col-md-8">
+    <main role="main" class="container" style="background-color: rgb(251, 249, 247); height: 100%; width: 95vh;  padding: 2vh;">
+  
+  
+      <div class="">
+        <div class="col-xl">
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
@@ -64,6 +67,7 @@ Date:                  4/21/21
           {% block content %} <!-- this is where the page contents go-->   {% endblock %} 
         </div>
       </div>
+  
     </main>
 
 

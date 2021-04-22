@@ -58,25 +58,44 @@ Date:                  4/21/21
                     {{ form.threshold(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
-            <!--Vendor -->
+            <!--Vendor Name-->
             <div class="form-group">
-                {{ form.vendor.label(class="form-control-label") }}
+                {{ form.vendorName.label(class="form-control-label") }}
 
-                {% if form.vendor.errors %}
-                    {{ form.vendor(class="form-control form-control-lg is-invalid") }}
+                {% if form.vendorName.errors %}
+                    {{ form.vendorName(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.vendor.errors %}
+                        {% for error in form.vendorName.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.vendor(class="form-control form-control-lg") }}
+                    {{ form.vendorName(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <!--Vendor URL-->
+            <div class="form-group">
+                {{ form.vendorURL.label(class="form-control-label") }}
+
+                {% if form.vendorURL.errors %}
+                    {{ form.vendorURL(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.vendorURL.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.vendorURL(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
         </fieldset>
         <div class="form-group">
             {{form.submit(class="btn btn-outline-info")}}
+            {% if priv %}
+                {{ form.delete(class="btn btn-outline-danger float-right") }}
+            {% endif %}
         </div>
+        
     </form>
 </div>
 

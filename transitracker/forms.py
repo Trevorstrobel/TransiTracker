@@ -84,7 +84,9 @@ class EditItemForm(FlaskForm):
     name = StringField('Item Name', validators=[DataRequired(), Length(min=1, max=30)])
     inStock = IntegerField('Number In Stock', validators=[DataRequired()])
     threshold = IntegerField('Reorder Threshold', validators=[DataRequired()])
-    vendor = StringField('Vendor')
+    vendorName = StringField('Vendor Name (optional)', validators=[Optional()])
+    vendorURL = StringField('Vendor URL (optional)', validators=[Optional(), URL()])
 
     #buttons
     submit = SubmitField('Submit Edit')
+    delete = SubmitField('Delete Item')
