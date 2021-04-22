@@ -30,7 +30,7 @@ Date:                  4/21/21
                 {% for data in (row | list)[1:] %} <!--for every piece of data in a row, make a new cell-->
                     <td>{{ data }}</td> <!-- populate cell-->
                 {% endfor %}
-                {% if priv%}
+                {% if priv or id == row[0]%} <!-- checks if user is admin. also grants privileges to change their own entry-->
                 <td class = ""> <!-- Cell for the edit button. will be only visible to admins-->
                     <a class="btn btn-primary" href="{{ url_for('editEmployee', user_id=row[0])}}" role="button">Edit</a>
                 </td>

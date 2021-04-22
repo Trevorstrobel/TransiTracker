@@ -92,7 +92,7 @@ def dashboard():
     #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
 
     # Here we retrieve the inventory. 
-    inventory = Item.query.with_entities(Item.name, Item.inStock, Item.threshold, Item.vendor).all()
+    inventory = Item.query.with_entities(Item.name, Item.inStock, Item.threshold, Item.vendorName, Item.vendorURL).all()
 
     #alertInv will hold the items that need to be brought to the users attention,
     # that is, items whose stock is lower than the reorder threshold or items whose
@@ -125,7 +125,7 @@ def dashboard():
 @login_required
 def inventory():
  
-    inventory = Item.query.with_entities(Item.id, Item.name, Item.inStock, Item.threshold, Item.vendor).all()
+    inventory = Item.query.with_entities(Item.id, Item.name, Item.inStock, Item.threshold, Item.vendorName, Item.vendorURL).all()
     return render_template('inventory.html', title='Inventory', column_html=itemCols,  data_html = inventory)
 
 @app.route("/createItem", methods=['GET', 'POST'])
@@ -139,7 +139,9 @@ def createItem():
     if form.validate_on_submit():
         #submit the data to the database
         #create item object that represents a row in the Item table. 
-        item = Item(name=form.name.data, inStock=form.inStock.data, threshold=form.threshold.data, vendor=form.vendor.data)
+        item = Item(name=form.name.data, inStock=form.inStock.data, 
+                    threshold=form.threshold.data, vendorName=form.vendorName.data, 
+                    vendorURL=form.vendorURL.data)
 
         #add and commit the new item object.
         db.session.add(item)
@@ -168,7 +170,7 @@ def editItem(item_id):
         item.name = form.name.data
         item.inStock = form.inStock.data
         item.threshold = form.threshold.data
-        item.vendor = form.vendor.data
+        item.vendorName = form.vendorName.data
 
         #commit to databse
         db.session.commit()
@@ -225,9 +227,13 @@ def employees():
             
     priv = False #default privilege value
     
+    if current_user.privilege == 1:
+        priv = True
 
     
-    return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users, search = search, priv= priv) 
+    return render_template('employees.html', title='Employees', 
+                    column_html = employeeCols, data_html = users, 
+                    search = search, priv= priv, id=current_user.id) 
 
 #Employee Edit Page
 @app.route("/editEmployee/<int:user_id>", methods=["GET", "POST"])

@@ -32,7 +32,8 @@ class Item(db.Model):
     name = db.Column(db.String(40), unique = True, nullable = False)
     inStock = db.Column(db.Integer, nullable = True)
     threshold = db.Column(db.Integer, nullable = True)
-    vendor = db.Column(db.String(40), nullable = True)
+    vendorName = db.Column(db.String(500), nullable = True)
+    vendorURL = db.Column(db.String(500), nullable = True)
     transactions = db.relationship('Transaction', backref='item', lazy = True)
 
 

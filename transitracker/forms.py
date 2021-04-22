@@ -3,7 +3,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, URL, Optional
 from transitracker.models import Employee
 
 
@@ -72,7 +72,8 @@ class CreateItemForm(FlaskForm):
     name = StringField('Item Name', validators=[DataRequired(), Length(min=1, max=30)])
     inStock = IntegerField('Number In Stock', validators=[DataRequired()])
     threshold = IntegerField('Reorder Threshold', validators=[DataRequired()])
-    vendor = StringField('Vendor')
+    vendorName = StringField('Vendor Name (optional)')
+    vendorURL = StringField('Vendor URL (optional)', validators=[Optional(), URL()])
 
     #buttons
     submit = SubmitField('Create')
