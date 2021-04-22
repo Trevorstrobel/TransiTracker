@@ -36,6 +36,8 @@ class EditAccountForm(FlaskForm):
     email = StringField('Email', render_kw={'readonly': True})
     #buttons
     submit = SubmitField('Edit Account')
+    password = SubmitField('Change Password')
+    
 
 # Change Password Form
 class ChangePasswordForm(FlaskForm):

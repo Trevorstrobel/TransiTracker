@@ -38,7 +38,7 @@ def login():
 
         #TODO: Flask throws an error when the wrong password is given instead of just saying "wrong password".
         #if the user exists and the password matches the hashed password in the db
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        if user and bcrypt.check_password_hash(user.password, form.password.data.encode('utf-8')):
             login_user(user, remember=form.remember.data)
             return redirect(url_for('dashboard'))
         else:
@@ -56,7 +56,12 @@ def createAccount():
         #hash the password from the form to store in the db
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
 
-        user = Employee(firstName=form.firstName.data, lastName=form.lastName.data, email=form.email.data, password = hashed_password)
+        if Employee.query.first() is None:
+            print('first user')
+            user = Employee(firstName=form.firstName.data, lastName=form.lastName.data, email=form.email.data, password = hashed_password, privilege=1)
+        else:
+            user = Employee(firstName=form.firstName.data, lastName=form.lastName.data, email=form.email.data, password = hashed_password)
+
 
         db.session.add(user)
         db.session.commit()
@@ -218,36 +223,67 @@ def employees():
             #TODO: remove duplicates if there's time. 
             #TODO: maybe use REGEX
             
+    priv = False #default privilege value
+    
 
     
-    print(users)
-    return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users, search = search) 
+    return render_template('employees.html', title='Employees', column_html = employeeCols, data_html = users, search = search, priv= priv) 
 
 #Employee Edit Page
 @app.route("/editEmployee/<int:user_id>", methods=["GET", "POST"])
 @login_required
 def editEmployee(user_id):
-    user = Employee.query.get_or_404(user_id) #returns 404 if the user does not exist.
 
+    print(current_user.id)
+    user = Employee.query.get_or_404(user_id) #returns 404 if the user does not exist.
+    current = False #determines whether "change password" should be visible
     form = EditAccountForm() #create form object
 
     if form.validate_on_submit():
-        user.firstName = form.firstName.data
-        user.lastName = form.lastName.data
-        user.email = form.email.data
+        if form.submit.data:    
+            user.firstName = form.firstName.data
+            user.lastName = form.lastName.data
+            user.email = form.email.data
 
-        #commit to db
-        db.session.commit()
-        flash('Employee account has been updated.', 'success')
-        return redirect(url_for('employees'))
-    
+            #commit to db
+            db.session.commit()
+            flash('Employee account has been updated.', 'success')
+            return redirect(url_for('employees'))
+
+        elif form.password.data:
+            return redirect(url_for('changePassword'))
+
     elif request.method == 'GET': #populates form fields on "GET" method
+
         form.firstName.data = user.firstName
         form.lastName.data = user.lastName
         form.email.data = user.email
 
+        if current_user.id == user.id or current_user.privilege == 1:
+            current = True
 
 
 
 
-    return render_template('edit_account.html', title=user.email, user=user, form=form) 
+    return render_template('edit_account.html', title=user.email, user=user, form=form, priv=current) 
+
+
+# Change Password
+@app.route("/changePassword", methods=['GET', 'POST'])
+@login_required
+def changePassword():
+    user = current_user
+    form = ChangePasswordForm()
+
+    if form.validate_on_submit(): #if user submits new password
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8') #hash the new password
+
+        user.password = hashed_password #set hashed password to the user obj's password field
+
+        db.session.commit() #commit the password change
+        flash('Changed Password', 'success')
+        return redirect(url_for('employees'))
+    
+    elif request.method == 'GET': #render on a 'GET' 
+        return render_template('change_password.html', title="Change Password", user=current_user, form=form)
+    

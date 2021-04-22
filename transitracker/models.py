@@ -12,14 +12,16 @@ def loadUser(employee_id):
 
 
 #Employee table with support for sessions
+#Users with privilege level 2 are 'drivers' as defined in the documenation
 class Employee(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String(20), nullable = False)
     lastName = db.Column(db.String(20), nullable = False)
     email = db.Column(db.String(120), unique=True, nullable = False)
-    phone = db.Column(db.String(10)) #is this necessary for our users?
     password = db.Column(db.String(60), nullable = False)
+    privilege = db.Column(db.Integer, nullable = False, default=2)
     transactions = db.relationship('Transaction', backref='employee', lazy = True)
+
 
     def __repr__(self):
         return f"Employee('{self.firstName}','{self.lastName}','{self.email}')"

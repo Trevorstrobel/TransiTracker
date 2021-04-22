@@ -1,3 +1,7 @@
+<!--
+Author:                Trevor Strobel
+Date:                  4/21/21
+-->
 {% extends "layout.html" %}
 {% block content %}
     <div class="content-section">
@@ -53,6 +57,9 @@
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
+                {% if priv %}
+                    {{ form.password(class="btn btn-outline-danger") }}
+                {% endif %}
             </div>
         </form>
     </div>

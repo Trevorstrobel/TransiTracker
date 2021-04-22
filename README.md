@@ -113,7 +113,7 @@ create database transitracker_dev;
 
 Then we create a user:
 ```
-create user ttadmin with encrypted password `csci4230`;
+create user ttadmin with encrypted password 'csci4230';
 ```
 
 Then we grant privileges to that user:
