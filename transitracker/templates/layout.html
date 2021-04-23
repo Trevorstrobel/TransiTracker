@@ -19,26 +19,18 @@ Date:                  4/21/21
     {% else %}
         <title>TransiTracker</title>
     {% endif %}
-
-    <style>
-        a {color: white;}
-
-
-        .navbar-toggler{color:white;}
-
-    </style>
 </head>
 <body class="bus-background" style="background-image: url('../static/transit.jpg'); background-repeat: no-repeat;
 background-attachment: fixed; background-size: cover; height:95vh;">
     <header class="site-header">
-      <nav class="navbar navbar-expand-md   fixed-top" style=" background-color: rgba(62,62,62,.8);  ">
+      <nav class="navbar navbar-expand-md   fixed-top" style="background-color: #9e9e9e;">
         <div class="container">
           <a class="navbar-brand mr-4" href="/">TransiTracker</a>
           <button class="navbar-toggler" type="button" style="color: black" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon" ></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarToggle" style=" text-align: center; ">
-            <div class="navbar-nav mr-auto" style="width: 100%;">
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="{{ url_for('dashboard') }}">DashBoard</a>
               <a class="nav-item nav-link" href="{{ url_for('inventory') }}">Inventory</a>
               <a class="nav-item nav-link" href="{{ url_for('transactions') }}">Transactions</a>
@@ -58,13 +50,11 @@ background-attachment: fixed; background-size: cover; height:95vh;">
         </div>
       </nav>
     </header> 
-    <main role="main" class="container" style="background-color: rgba(255,255,255,.9); height: 100%; width: 95vh;  padding: 2vh;">
+    <main role="main" class="container" style="background-color: rgb(251, 249, 247); height: 100%; width: 95vh;  padding: 2vh;">
   
   
-
       <div class="">
         <div class="col-xl" style="margin-top: 3vh;">
-
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
