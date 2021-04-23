@@ -201,6 +201,40 @@ def transactions():
     return render_template('transactions.html', title='Transactions', data = transactions)
 
 
+
+#Take Item route
+@app.route("/takeItem", methods=['GET', 'POST'])
+def takeItem():
+
+    form = CreateTransactionForm()
+
+    if form.validate_on_submit():
+        #Grab the item from the item ID
+
+
+        item = Item.query.with_entities(Item.name, Item.inStock).first()
+        item = Item.query.filter_by(name=form.name.data).first() #grabs first entry with that email
+        
+
+        #Remove the number taken from the database
+
+        item.inStock = item.inStock - form.num_taken.data
+
+#         Transaction = Transaction(employee_id = form.employee_id.data, item_id = form.item_id.data, num_taken = form.num_taken.data, count_before = self.inStock.data - form.inStock.data)
+        db.session.commit()
+        flash('The transaction has been made', 'success')
+        return redirect(url_for('inventory'))
+
+
+#         db.session.add(Transaction)
+#         db.session.commit()
+
+
+
+
+    return render_template('create_transaction.html', title='Create Transaction', form = form)
+
+
 #------------------------------Employee Routes--------------------------------
 #Employees Page
 @app.route("/employees", methods=["GET", "POST"])

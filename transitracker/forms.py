@@ -90,3 +90,13 @@ class EditItemForm(FlaskForm):
     #buttons
     submit = SubmitField('Submit Edit')
     delete = SubmitField('Delete Item')
+
+#create Transaction Form
+class CreateTransactionForm(FlaskForm):
+    #fields
+    name = StringField('Item Name', validators=[DataRequired(), Length(min=1, max=30)])
+    num_taken = IntegerField('Number Taken From Inventory', validators=[DataRequired()])
+
+
+    #buttons
+    submit = SubmitField('Create')
