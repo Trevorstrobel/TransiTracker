@@ -61,8 +61,10 @@ background-attachment: fixed; background-size: cover; height:95vh;">
     <main role="main" class="container" style="background-color: rgba(255,255,255,.9); height: 100%; width: 95vh;  padding: 2vh;">
   
   
-      <div class="" >
-        <div class="col-xl" >
+
+      <div class="">
+        <div class="col-xl" style="margin-top: 3vh;">
+
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
