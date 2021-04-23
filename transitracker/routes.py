@@ -223,7 +223,7 @@ def takeItem():
 #         Transaction = Transaction(employee_id = form.employee_id.data, item_id = form.item_id.data, num_taken = form.num_taken.data, count_before = self.inStock.data - form.inStock.data)
         db.session.commit()
         flash('The transaction has been made', 'success')
-        return redirect(url_for('inventory'))
+        return redirect(url_for('transactions'))
 
 
 #         db.session.add(Transaction)

@@ -16,29 +16,32 @@ Date:                  4/21/21
     </div>
 </form>
 
-<table class="table">
-    <thead>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
         <tr> <!-- This block adds column names to the table-->
             {% for item in column_html %}
-                <th>{{item}}</th>
+            <th>{{item}}</th>
             {% endfor %}
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         {% for row in data_html %} <!-- for row in query response, make a new row-->
-            <tr>
-                {% for data in (row | list)[1:] %} <!--for every piece of data in a row, make a new cell-->
-                    <td>{{ data }}</td> <!-- populate cell-->
-                {% endfor %}
-                {% if priv or id == row[0]%} <!-- checks if user is admin. also grants privileges to change their own entry-->
-                <td class = ""> <!-- Cell for the edit button. will be only visible to admins-->
-                    <a class="btn btn-primary" href="{{ url_for('editEmployee', user_id=row[0])}}" role="button">Edit</a>
-                </td>
-                {% endif %}
-            </tr>
+        <tr>
+            {% for data in (row | list)[1:] %} <!--for every piece of data in a row, make a new cell-->
+            <td>{{ data }}</td> <!-- populate cell-->
+            {% endfor %}
+            {% if priv or id == row[0]%} <!-- checks if user is admin. also grants privileges to change their own entry-->
+            <td class = ""> <!-- Cell for the edit button. will be only visible to admins-->
+                <a class="btn btn-primary" href="{{ url_for('editEmployee', user_id=row[0])}}" role="button">Edit</a>
+            </td>
+            {% endif %}
+        </tr>
 
         {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+
 
 {% endblock content %}

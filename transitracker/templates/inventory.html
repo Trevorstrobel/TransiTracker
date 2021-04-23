@@ -7,51 +7,53 @@ Date:                  4/21/21
 <h3>Inventory</h3>
 <a class="btn btn-primary" href="{{ url_for('createItem') }}" role="button">Create Item</a>
 
-
-<table class="table">
-    <thead>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
         <tr> <!-- This block adds column names to the table-->
             {% for item in column_html %}
-                <th>{{item}}</th>
+            <th>{{item}}</th>
             {% endfor %}
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         {% for row in data_html %} <!-- for row in query response, make a new row-->
-            <tr>
-                {% for data in (row | list)[1:4] %} <!--for every piece of data in a row (except the first(the id)), make a new cell-->
-                    <td>{{ data }}</td> <!-- populate cell-->
-                {% endfor %}
+        <tr>
+            {% for data in (row | list)[1:4] %} <!--for every piece of data in a row (except the first(the id)), make a new cell-->
+            <td>{{ data }}</td> <!-- populate cell-->
+            {% endfor %}
 
-                <!-- Vendor Section-->
-                {% if row[4] != '' %} <!--checks to see if a vendor name is listed-->
-                    {% if row[5] != '' %} <!-- checks if there is a url associated-->
-                    <td>
-                        <a href={{row[5]}}>{{ row[4] }}</a> <!--takes the user to the specific page-->
-                    </td>
-                    {% else%}
-                    <td>
-                        <p>{{ row[4] }}</p> <!---->
-                    </td>
-                    {% endif %} 
-                {%  else %} <!--keeps the table aligned if there isn't a vendor-->
-                    {% if row[5] != '' %}
-                    <td>
-                        <a href={{row[5]}}>Link</a> <!--takes the user to the specific page-->
-                    </td>
-                    {%  else %}
-                    <td>
-                        <p></p>
-                    </td>
-                    {% endif %}
-                {% endif%}
-                <td class = "admin"> <!-- Cell for the edit button. will be only visible to admins-->
-                    <a class="btn btn-primary" href="{{ url_for('editItem', item_id=row[0])}}" role="button">Edit</a>
+            <!-- Vendor Section-->
+            {% if row[4] != '' %} <!--checks to see if a vendor name is listed-->
+            {% if row[5] != '' %} <!-- checks if there is a url associated-->
+            <td>
+                <a href={{row[5]}}>{{ row[4] }}</a> <!--takes the user to the specific page-->
+            </td>
+            {% else%}
+            <td>
+                <p>{{ row[4] }}</p> <!---->
+            </td>
+            {% endif %}
+            {%  else %} <!--keeps the table aligned if there isn't a vendor-->
+            {% if row[5] != '' %}
+            <td>
+                <a href={{row[5]}}>Link</a> <!--takes the user to the specific page-->
+            </td>
+            {%  else %}
+            <td>
+                <p></p>
+            </td>
+            {% endif %}
+            {% endif%}
+            <td class = "admin"> <!-- Cell for the edit button. will be only visible to admins-->
+                <a class="btn btn-primary" href="{{ url_for('editItem', item_id=row[0])}}" role="button">Edit</a>
 
-                </td>
-            </tr>
+            </td>
+        </tr>
 
         {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+
 {% endblock content %}
