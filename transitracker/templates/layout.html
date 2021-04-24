@@ -33,80 +33,16 @@ Date:                  4/21/21
             background-color: rgba(62,62,62,.8);
             color: white;
         }
-        .appName{
+        .navbar-brand{
             font-size: 1.5rem;
-            margin: .5 rem;
+            margin: .5rem;
         }
-        .navbar-links ul{
-            margin: 0;
-            padding: 0;
-            display: flex;
+        .navbar-dark .navbar-nav .nav-link{
+          color: white;
+          opacity: 1;
         }
-        .navbar-links li{
-            list-style: none;
-        }
-        .navbar-links li a{
-            text-decoration: none;
-            padding: 1rem;
-            display: block;
-        }
-        .navbar a{
-            color: white;
-        }
-
-        .navbar-links ul li:last-child{
-            margin-left: auto;
-        }
-        .toggle-button{
-            position: absolute;
-            top: .75 rem;
-            right: 1rem;
-            display: none;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 31px;
-            height: 21px;
-        }
-        .toggle-button .bar{
-            height: 3px;
-            width: 100%;
-            background-color: white;
-            border-radius: 10px;
-
-        }
-        @media (max-width: 700px){
-            .navbar{
-                width: 100%;
-            }
-
-            .toggle-button{
-                display: flex;
-            }
-            .navbar-links{
-                display: none;
-                width: 100%;
-            }
-            .navbar{
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .navbar-links ul{
-                width: 100%;
-                flex-direction: column;
-            }
-            .navbar-links li{
-                text-align: center;
-            }
-            .navbar-links li a{
-                padding: 1rem;
-            }
-            .navbar-links ul li:last-child{
-                margin:auto;
-            }
-            .navbar-links.active{
-                display: flex;
-
-            }
+        .btn{
+            margin: 0.3rem;
         }
 
         #body {
@@ -121,31 +57,31 @@ Date:                  4/21/21
 </head>
 <body class="bus-background" style="background-image: url('../static/transit.jpg'); background-repeat: no-repeat;
 background-attachment: fixed; background-size: cover; height:95vh;">
-      <nav class="navbar" style="" >
-            <div><a class="appName" href="/" style="display: inline-block text-decoration:none;">TransiTracker</a></div>
-            <a href="#" class="toggle-button">
-                <span  class="bar"></span>
-                <span  class="bar"></span>
-                <span  class="bar"></span>
-            </a>
-            <div class="navbar-links" style="text-align:center; ">
-                <ul>
-                    <li><a class=" " href="{{ url_for('dashboard') }}">DashBoard</a></li>
-                    <li><a class=" " href="{{ url_for('inventory') }}">Inventory</a></li>
-                    <li><a class="" href="{{ url_for('transactions') }}">Transactions</a></li>
-                    <li><a class="" href="{{ url_for('employees') }}">Employees</a></li>
+      <nav class="navbar navbar-expand-md navbar-dark">
+            <a class="navbar-brand" href="/" >TransiTracker</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbartoggle">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbartoggle">
+                <ul class="navbar-nav ml-auto">
+                    <li><a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a class="nav-link" href="{{ url_for('inventory') }}">Inventory</a></li>
+                    <li><a class="nav-link" href="{{ url_for('transactions') }}">Transactions</a></li>
+                    <li><a class="nav-link" href="{{ url_for('employees') }}">Employees</a></li>
                     {% if current_user.is_authenticated %}
-                    <li><a class="" href="{{ url_for('logout') }}">Logout</a></li>
+                    <li><a class="nav-link badge-secondary" href="{{ url_for('logout') }}">Logout</a></li>
                     {% else %}
-                    <li><a class="" href="{{ url_for('login') }}">Login</a></li>
+                    <li><a class="nav-link badge-secondary" href="{{ url_for('login') }}">Login</a></li>
                     {% endif %}
                 </ul>
             </div>
             <!-- Navbar Right Side-->
       </nav>
+
+
+
     <main role="main" class="" >
-  
-  
+
       <div class="container" id="body">
         <div class="col-xl" style="margin-top: 3vh;">
           {% with messages = get_flashed_messages(with_categories=true) %}
@@ -157,25 +93,14 @@ background-attachment: fixed; background-size: cover; height:95vh;">
               {% endfor %}
             {% endif %}
           {% endwith %}
-          {% block content %} <!-- this is where the page contents go-->   {% endblock %} 
+          {% block content %} <!-- this is where the page contents go-->   {% endblock %}
         </div>
       </div>
-  
+
     </main>
 
 
     <!-- Optional JavaScript -->
-    <script>
-        const toggleButton = document.getElementsByClassName('toggle-button')[0]
-        const navbarlinks = document.getElementsByClassName('navbar-links')[0]
-
-        toggleButton.addEventListener('click',() => {
-            navbarlinks.classList.toggle('active')
-        })
-
-    </script>
-
-
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
