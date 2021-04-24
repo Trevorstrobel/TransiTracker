@@ -5,6 +5,7 @@ from transitracker import app, db, bcrypt
 from transitracker.forms import *
 from transitracker.models import Employee, Item, Transaction, employeeCols, itemCols, transactionCols
 from flask_login import login_user,  logout_user, current_user, login_required
+from datetime import date
 
 
 
@@ -197,8 +198,14 @@ def editItem(item_id):
 @login_required
 def transactions():
 
-    transactions = Transaction.query.all()
-    return render_template('transactions.html', title='Transactions', data = transactions)
+    transactions = Transaction.query.with_entities(Transaction.id, Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
+    employees = []
+
+    for t in transactions:
+        emp_id = t[1]
+        user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
+        employees.append(user)
+    return render_template('transactions.html', title='Transactions', data_html = transactions, column_html = transactionCols, employees_html = employees)
 
 
 
@@ -211,26 +218,21 @@ def takeItem():
     if form.validate_on_submit():
         #Grab the item from the item ID
 
-
         item = Item.query.with_entities(Item.name, Item.inStock).first()
         item = Item.query.filter_by(name=form.name.data).first() #grabs first entry with that email
+        employee = Employee.query.with_entities(Employee.id).first()
         
 
+        today = date.today()
+        d1 = today.strftime("%m/%d/%Y")
         #Remove the number taken from the database
-
         item.inStock = item.inStock - form.num_taken.data
+        tran = Transaction(employee_id = employee.id, item_id = item.id, num_taken = form.num_taken.data, count_before = item.inStock, date= d1)
 
-#         Transaction = Transaction(employee_id = form.employee_id.data, item_id = form.item_id.data, num_taken = form.num_taken.data, count_before = self.inStock.data - form.inStock.data)
+        db.session.add(tran)
         db.session.commit()
         flash('The transaction has been made', 'success')
         return redirect(url_for('transactions'))
-
-
-#         db.session.add(Transaction)
-#         db.session.commit()
-
-
-
 
     return render_template('create_transaction.html', title='Create Transaction', form = form)
 

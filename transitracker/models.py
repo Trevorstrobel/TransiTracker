@@ -47,9 +47,10 @@ class Transaction(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable = False)
     num_taken = db.Column(db.Integer, nullable = False)
     count_before = db.Column(db.Integer, nullable = False)
+    date = db.Column(db.String(10), nullable = False)
 
     def __repr__(self):
-        return f"Transaction('{self.employee_id}', '{self.item_id}','{self.num_taken}', '{self.count_before}')"
+        return f"Transaction('{self.employee_id}', '{self.item_id}','{self.num_taken}', '{self.count_before}', '{self.date}')"
     
 
 
@@ -57,4 +58,4 @@ class Transaction(db.Model):
 # This may not be the best place for them, but I'm not sure where else I'd put them.
 employeeCols = ['First Name', 'Last Name', 'Email Address']
 itemCols = ['Item Name', 'Number In Stock', 'Reorder Threshold', 'Vendor']
-transactionCols = ['Employee', 'Item Taken', 'Number Taken', 'Stock Before Transaction']
+transactionCols = ['Employee', 'Item Taken', 'Number Taken', 'Stock Before Transaction', 'Date']
