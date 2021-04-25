@@ -18,8 +18,7 @@ Date:                  4/21/21
         </tr>
         </thead>
         <tbody>
-<!--        {% for row in data_html %} &lt;!&ndash; for row in query response, make a new row&ndash;&gt;-->
-<!--        {​% for row in column_html %}​-->
+        {% for row in data_html %} 
         <tr>
             {% for data in (row | list)[1:] %} <!--for every piece of data in a row (except the first(the id)), make a new cell-->
             <td>{{ data }}</td> <!-- populate cell-->
