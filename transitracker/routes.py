@@ -199,13 +199,18 @@ def editItem(item_id):
 def transactions():
 
     transactions = Transaction.query.with_entities(Transaction.id, Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
-    employees = []
+    trans = []
 
+    i = 0
     for t in transactions:
+        print(t)
         emp_id = t[1]
+        i_id = t[2]
         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
-        employees.append(user)
-    return render_template('transactions.html', title='Transactions', data_html = transactions, column_html = transactionCols, employees_html = employees)
+        item = Item.query.filter_by(id=i_id).first()
+        trans.append((t.id, (user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
+        
+    return render_template('transactions.html', title='Transactions', data_html = trans, column_html = transactionCols, employees_html = employees)
 
 
 
