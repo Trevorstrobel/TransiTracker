@@ -3,33 +3,34 @@ Author:                Trevor Strobel
 Date:                  4/21/21
 -->
 {% extends "layout.html" %}
-{% block content %}
-<h3>Transactions</h3>
+    {% block content %}
+    <h3 style="padding: 5px;">Transactions</h3>
 
-<a class="btn btn-primary" href="{{ url_for('takeItem') }}" role="button">+</a>
+    <a class="btn btn-primary" href="{{ url_for('takeItem') }}" role="button" style="float: left;">Create Transaction +</a>
 
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-        <tr> <!-- This block adds column names to the table-->
-            {% for item in column_html %}
-            <th>{{item}}</th>
+    <div class="table-responsive" style="border-spacing: 1em;">
+        <table class="table table-striped">
+            <thead>
+            <tr> <!-- This block adds column names to the table-->
+                {% for item in column_html %}
+                <th>{{item}}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in data_html %}
+            <tr>
+                {% for data in (row | list)[1:] %} <!--for every piece of data in a row (except the first(the id)), make a new cell-->
+                <td>{{ data }}</td> <!-- populate cell-->
+                {% endfor %}
+            </tr>
+
             {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in data_html %} 
-        <tr>
-            {% for data in (row | list)[1:] %} <!--for every piece of data in a row (except the first(the id)), make a new cell-->
-            <td>{{ data }}</td> <!-- populate cell-->
-            {% endfor %}
-        </tr>
-
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 
 
 
-{% endblock content %}
+    {% endblock content %}
+
