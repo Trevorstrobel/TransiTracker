@@ -199,8 +199,8 @@ def editItem(item_id):
 def transactions():
 
     transactions = Transaction.query.with_entities(Transaction.id, Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
+    transactions = transactions.order_by(Transaction.id.desc())
     trans = []
-
     i = 0
     for t in transactions:
         print(t)
