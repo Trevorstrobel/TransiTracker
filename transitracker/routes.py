@@ -113,11 +113,28 @@ def dashboard():
         #add items whose stock is less than 20% of the threshold above the threshold. (will need to be reordered soon.)    
         elif (difference > 0 and difference <= twentyP):
             alertInv.append(item)
-            inventory.remove(item) #remove the item from the local inventory list to prevent dupes.   
+            inventory.remove(item) #remove the item from the local inventory list to prevent dupes.
+
+
+    transactions = Transaction.query.with_entities(Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
+    transactions = transactions.order_by(Transaction.id.desc())
+    trans = []
+    tentran = []
+    for t in transactions:
+        emp_id = t[1]
+        i_id = t[2]
+        user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
+        item = Item.query.filter_by(id=i_id).first()
+        trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
+
+    count = 0
+    for i in range(len(trans)):
+        tentran.append(trans[count])
+        count += 1
     
 
    
-    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols) # alertInv = alertInventory, recentTrans = recentTransactions)
+    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols, trans_column_html = transactionCols, trans_data_html = tentran) # alertInv = alertInventory, recentTrans = recentTransactions)
 
 
 #------------------------------Inventory Routes--------------------------------
