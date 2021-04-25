@@ -88,8 +88,7 @@ def logout():
 @app.route("/dashboard")
 @login_required
 def dashboard():
- 
-    #TODO: fetch last 10 transactions and return with render_template
+
     #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
 
     # Here we retrieve the inventory. 
@@ -116,11 +115,12 @@ def dashboard():
             inventory.remove(item) #remove the item from the local inventory list to prevent dupes.
 
 
+    #Fetch all the transactions
     transactions = Transaction.query.with_entities(Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
-    transactions = transactions.order_by(Transaction.id.desc())
+    transactions = transactions.order_by(Transaction.id.desc()) #puts all transactions in order from most recent-oldest
     trans = []
-    tentran = []
-    for t in transactions:
+    tentran = [] #holds the 10 most recent transactions
+    for t in transactions:  #adds the users name to the transaction and replaces the employee_id
         emp_id = t[1]
         i_id = t[2]
         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
@@ -128,9 +128,11 @@ def dashboard():
         trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
 
     count = 0
+    #adds the 10 most recent transactions to the top 10 list.
     for i in range(len(trans)):
-        tentran.append(trans[count])
-        count += 1
+        if count <= 10:
+            tentran.append(trans[count])
+            count += 1
     
 
    
