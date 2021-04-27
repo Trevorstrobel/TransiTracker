@@ -353,7 +353,7 @@ def editEmployee(user_id):
             return redirect(url_for('employees'))
 
         elif form.password.data:
-            return redirect(url_for('changePassword'))
+            return redirect(url_for('changePassword', user_id=user_id))
 
     elif request.method == 'GET': #populates form fields on "GET" method
 
@@ -380,10 +380,10 @@ def editEmployee(user_id):
 
 
 # Change Password
-@app.route("/changePassword", methods=['GET', 'POST'])
+@app.route("/changePassword/<int:user_id>", methods=['GET', 'POST'])
 @login_required
-def changePassword():
-    user = current_user
+def changePassword(user_id):
+    user = Employee.query.get_or_404(user_id) #returns 404 if the user does not exist.
     form = ChangePasswordForm()
 
     if form.validate_on_submit(): #if user submits new password
