@@ -121,8 +121,8 @@ def dashboard():
     trans = []
     tentran = [] #holds the 10 most recent transactions
     for t in transactions:  #adds the users name to the transaction and replaces the employee_id
-        emp_id = t[1]
-        i_id = t[2]
+        emp_id = t[0]
+        i_id = t[1]
         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
         item = Item.query.filter_by(id=i_id).first()
         
