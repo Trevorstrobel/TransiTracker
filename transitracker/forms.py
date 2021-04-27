@@ -98,7 +98,7 @@ class CreateTransactionForm(FlaskForm):
     num_taken = IntegerField('Number Taken From Inventory', validators=[DataRequired()])
 
     #buttons
-    submit = SubmitField('Create')
+    submit = SubmitField('Submit')
 
 
 class TransactionSearchForm(FlaskForm):

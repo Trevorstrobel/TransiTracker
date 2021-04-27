@@ -92,9 +92,6 @@ As mentioned previously, this application leverages several Python packages. To 
 $ pip3 install -r requirements.txt
 ```
 
-
-
-
 ---
 TransiTracker DB Creation
 ---
@@ -141,7 +138,9 @@ You should now be back at your shell, indicated by the ```$ ``` character in Bas
 ---
 Running the Application
 ---
-**For Devs:**To run the application in developer mode, run the following command:
+
+
+To run the application in developer mode, run the following command:
 
 ```
 $ python3 run.py
@@ -150,6 +149,127 @@ $ python3 run.py
 
 
 **Author Notes:** 
- Create run script for pm2. Write instructions on how to run that script. We also need to set params for running in production mode, and set the port to 80.
+ We also need to set params for running in production mode, and set the port to 80.
 
 
+---
+
+<h2>Account Creation</h2>
+When you open the app while not logged in, you will always be redirected to the Log On page. Click the `Create Account` button found just below the Login form.
+<br><br>
+
+![Login](/UserManual/images/login.png)
+
+You will then see the Create An Account page:
+
+![CreateAccount](images/create_account.png)
+
+Fully fill out the page and click `Create Account`. You'll then be returned to the Login Page where you can log in.
+
+**Note:** The first account created is automatically an Admin account. All further accounts will be created as regular User accounts. For information on how to change someone's privilege level, see the section "Edit User"
+
+---
+
+<h2>Logging In</h2>
+
+To log in to the TransiTracker application, navigate to the Login page by clicking the `Log In` button in the top right of the window. 
+
+Fill out the displayed Log In form with your credentials.
+
+![Login](/UserManual/images/login.png)
+
+You will then be redirected to the Dashboard page.
+
+---
+<h2>Dashboard</h2>
+
+![Dashboard](/UserManual/images/Dashboard.png)
+
+The dashboard is where you'll find the most important information for your day-to-day operations in TransiTracker. There are two tables on the dashboard: Reorder Alerts and Recent Transactions.
+
+As the name implies, Reorder Alerts will display items that need to be reordered. This decision is made based on the number of that item in stock and the reorder threshold set in the item's settings. More on that later in the "Item Creation" section.
+
+Recent Transactions shows the 10 most recent transactions made in the TransiTracker system.
+
+---
+<h2>Inventory</h2>
+
+![Inventory](images/inventory.png)
+
+
+The Inventory page lists all of the items currently in inventory. For Admin users, the `Edit` button will appear next to each item. Clicking the `Edit` button allows an Admin to edit the item's attributes.
+
+---
+
+<h2>Create Item</h2>
+
+To add a new item to inventory, click the `Create Item` button the Inventory page. You'll now see the Create Item page.
+
+![CreateItem](images/create_item.png)
+
+Fill out the form while noting that the Name field cannot be the same as another Item's name. All fields are required unless marked `(optional)`
+
+Finalize the creation by clicking the `Create` button at the bottom of the form.
+
+
+---
+<h2>Edit Item</h2>
+
+As mentioned above, Admin users have the ability to edit an item's attributes using the item's `Edit` button in the Inventory table. 
+
+Clicking the `Edit` button returns the following page:
+
+![EditItem](/UserManual/images/edit_item.png)
+
+
+Here, you can alter an item's Vendor details, or adjust the number in stock or reorder threshold. Be careful, as changing an item's stock here will not create a Transaction for the item. Transactions are discussed in the section "Create Transaction".
+
+---
+<h2>Transactions</h2>
+
+In the TransiTracker application, a Transaction represents an item being taken from inventory by an employee. Whenever an employee takes an item from inventory, they should make a Transaction to record that change in stock. 
+
+Navigating to the Transactions page, you'll see the following:
+
+![Transactions](images/transactions.png)
+
+Displayed in the Transactions page is a table showing all recorded transactions. You can also search for a particular transaction by searching the employee's name, or the item name on the transaction. Type  the name of an item, or an employee's name in the `Search` bar and click the `Search` button. To clear your search results, and return to the complete list of transactions, press the `Clear` button. 
+
+
+---
+
+<h2>Create Transaction</h2>
+
+Any employee can create a transaction, and **should** do so whenever they remove an item from inventory for use at work. To create a transaction, navigate to the Transactions page and click the `Create Transaction` button just below the `Search` button. 
+
+![CreateTransaction](/UserManual/images/create_transaction.png)
+
+Fill out the form by entering in an item's name and the number of the item you're removing from the inventory. Then click the `Submit` button to finalize the transaction. 
+
+---
+<h2>Employees</h2>
+
+Navigating to the Employees page will return the list of all registered
+accounts in the TransiTracker application. 
+
+![Employees](images/employees.png)
+
+You can search for an employee by entering their first or last (or both) name(s) into the `Search` bar and clicking the `Search` button. The table will then populate with the results of the search. To clear your search, and return to the complete list of employees, click the `Clear` button. 
+
+---
+
+<h2>Edit Account</h2>
+
+An employee is able to edit their own account details, as well as change their password in the Edit Account form. To reach the Edit Account form, simply click on the `Edit` button next to your email address in the Employees table. 
+
+
+![EditAccount](images/edit_employee.png)
+
+
+Admin users are able to edit any account. If a user forget's their password, an Administrator may change their password. We suggest the user then change their password for increased security. 
+
+---
+
+<h2>Logout</h2>
+
+To log out of the TransiTracker application, simply click the `Logout` button in the top right of the window. If the `Logout` button is not present, then you are not currently logged in. 
