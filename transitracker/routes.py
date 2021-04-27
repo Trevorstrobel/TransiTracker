@@ -125,15 +125,19 @@ def dashboard():
         i_id = t[2]
         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
         item = Item.query.filter_by(id=i_id).first()
-        trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
+        
+        if(user != None and item != None ): #checks to see if there are any transactions present in the return from the db.
+            
+            trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
 
-    count = 0
-    #adds the 10 most recent transactions to the top 10 list.
-    for i in range(len(trans)):
-        if count <= 10:
-            tentran.append(trans[count])
-            count += 1
-   
+            count = 0
+            #adds the 10 most recent transactions to the top 10 list.
+            for i in range(len(trans)):
+                if count <= 10:
+                    tentran.append(trans[count])
+                    count += 1
+        elif(user == None):
+            print("user is None")
     return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols, trans_column_html = transactionCols, trans_data_html = tentran) # alertInv = alertInventory, recentTrans = recentTransactions)
 
 
