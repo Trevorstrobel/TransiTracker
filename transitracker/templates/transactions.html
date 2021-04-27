@@ -4,9 +4,14 @@ Date:                  4/21/21
 -->
 {% extends "layout.html" %}
 {% block content %}
-<h3>Transactions</h3>
+<h3 class="pt-1">Transactions</h3>
 
-<a class="btn btn-primary" href="{{ url_for('takeItem') }}" role="button">+</a>
+<form class="form-inline my-2 my-lg-2">
+  <a class="btn btn-primary" href="{{ url_for('takeItem') }}" role="button">+</a>
+  <input class="form-control ml-auto" type="search" placeholder="Search" aria-label="Search">
+  <button class="btn btn-secondary my-2 my-sm-2 mr-0" type="submit">Search</button>
+  <button class="btn btn-danger my-2 my-sm-2" type="reset">Clear</button>
+</form>
 
 <div class="table-responsive">
     <table class="table">
@@ -18,7 +23,7 @@ Date:                  4/21/21
         </tr>
         </thead>
         <tbody>
-        {% for row in data_html %} 
+        {% for row in data_html %}
         <tr>
             {% for data in (row | list)[1:] %} <!--for every piece of data in a row (except the first(the id)), make a new cell-->
             <td>{{ data }}</td> <!-- populate cell-->
