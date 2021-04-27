@@ -35,6 +35,8 @@ class EditAccountForm(FlaskForm):
     lastName = StringField('Last Name', validators=[DataRequired(), Length(min=1, max=20)])
     email = StringField('Email', render_kw={'readonly': True})
     #buttons
+    adminSwitch = BooleanField('Is this User an Admin?')
+
     submit = SubmitField('Edit Account')
     password = SubmitField('Change Password')
     

@@ -330,14 +330,22 @@ def editEmployee(user_id):
 
     print(current_user.id)
     user = Employee.query.get_or_404(user_id) #returns 404 if the user does not exist.
-    current = False #determines whether "change password" should be visible
+    current = False #determines whether "change password" should be visible (deprecated, but deadlines are short, so im leaving it.)
     form = EditAccountForm() #create form object
+    admin = False
 
     if form.validate_on_submit():
         if form.submit.data:    
             user.firstName = form.firstName.data
             user.lastName = form.lastName.data
             user.email = form.email.data
+            
+            #sets admin status
+            if(form.adminSwitch.data):
+                user.privilege = 1
+            elif(form.adminSwitch.data == False):
+                user.privilege = 2
+            
 
             #commit to db
             db.session.commit()
@@ -353,13 +361,22 @@ def editEmployee(user_id):
         form.lastName.data = user.lastName
         form.email.data = user.email
 
+        #sets form data for Admin status
+        if(user.privilege == 1):
+            form.adminSwitch.data = True
+        else:
+            form.adminSwitch.data = False
+
         if current_user.id == user.id or current_user.privilege == 1:
             current = True
 
+        if current_user.privilege == 1:
+            admin = True
 
 
 
-    return render_template('edit_account.html', title=user.email, user=user, form=form, priv=current) 
+
+    return render_template('edit_account.html', title=user.email, user=user, form=form, priv=current, admin=admin) 
 
 
 # Change Password
