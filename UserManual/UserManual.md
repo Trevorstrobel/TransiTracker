@@ -3,9 +3,7 @@
 
 ---
 
-<h2>Table of Contents </h2>
-- [TransiTracker DB Creation](#transitracker-db-creation)
-- [Running the Application](#running-the-application)
+
 
 
 
