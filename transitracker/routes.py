@@ -88,8 +88,7 @@ def logout():
 @app.route("/dashboard")
 @login_required
 def dashboard():
- 
-    #TODO: fetch last 10 transactions and return with render_template
+
     #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
 
     # Here we retrieve the inventory. 
@@ -113,11 +112,29 @@ def dashboard():
         #add items whose stock is less than 20% of the threshold above the threshold. (will need to be reordered soon.)    
         elif (difference > 0 and difference <= twentyP):
             alertInv.append(item)
-            inventory.remove(item) #remove the item from the local inventory list to prevent dupes.   
-    
+            inventory.remove(item) #remove the item from the local inventory list to prevent dupes.
 
+
+    #Fetch all the transactions
+    transactions = Transaction.query.with_entities(Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
+    transactions = transactions.order_by(Transaction.id.desc()) #puts all transactions in order from most recent-oldest
+    trans = []
+    tentran = [] #holds the 10 most recent transactions
+    for t in transactions:  #adds the users name to the transaction and replaces the employee_id
+        emp_id = t[1]
+        i_id = t[2]
+        user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
+        item = Item.query.filter_by(id=i_id).first()
+        trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
+
+    count = 0
+    #adds the 10 most recent transactions to the top 10 list.
+    for i in range(len(trans)):
+        if count <= 10:
+            tentran.append(trans[count])
+            count += 1
    
-    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols) # alertInv = alertInventory, recentTrans = recentTransactions)
+    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols, trans_column_html = transactionCols, trans_data_html = tentran) # alertInv = alertInventory, recentTrans = recentTransactions)
 
 
 #------------------------------Inventory Routes--------------------------------
@@ -194,12 +211,16 @@ def editItem(item_id):
 
 #------------------------------Transaction Routes--------------------------------
 #Transaction Page
-@app.route("/transactions")
+@app.route("/transactions", methods=['GET', 'POST'])
 @login_required
 def transactions():
 
     transactions = Transaction.query.with_entities(Transaction.id, Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
+
     transactions = transactions.order_by(Transaction.id.desc())
+
+    searchTransactions = Transaction.query.with_entities(Transaction.employee_id, Transaction.item_id, Transaction.date).all()
+
     trans = []
     i = 0
     for t in transactions:
@@ -209,8 +230,25 @@ def transactions():
         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
         item = Item.query.filter_by(id=i_id).first()
         trans.append((t.id, (user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
-        
-    return render_template('transactions.html', title='Transactions', data_html = trans, column_html = transactionCols, employees_html = employees)
+
+    search = TransactionSearchForm()
+    searchData = []
+    if search.validate_on_submit(): #check for form validation (in this case, just need any input)
+        if search.searchBtn.data:
+            #gets the information from the search bar
+            param = search.searchStr.data
+            #Goes through the transactions to see if the search information is in a transaction
+            for t in trans:
+                for entry in t:
+                    if entry == param:
+                        searchData.append(t)
+
+    x = len(searchData)
+    if x != 0:
+        trans = searchData
+
+
+    return render_template('transactions.html', title='Transactions', data_html = trans, column_html = transactionCols, employees_html = employees, search = search)
 
 
 
@@ -260,7 +298,6 @@ def employees():
         if search.searchBtn.data:  # if the searchBtn is pressed...
             
             param = search.searchStr.data #search parameters
-
             #first we get all entries that match first name, then last name.
             users = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.firstName.like(param)).all()
             users2 = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.lastName.like(param)).all()

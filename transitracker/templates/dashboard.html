@@ -4,13 +4,13 @@ Date:                  4/21/21
 -->
 {% extends "layout.html" %}
 {% block content %}
-<h3 style="padding: 1%;">Dashboard</h3>
+<h3 style="padding: 1% 0 0 0 ; font-weight: bold;">Dashboard</h3>
 
 <!-- Item Alert Table: This table shows those items who are below or nearing the reorder threshold.-->
 
 <div class="table-responsive">
+    <h4>Reorder Alerts</h4>
     <table class="table table-striped">
-        <h4>Reorder Alerts</h4>
         <thead class="">
         <tr> <!-- This block adds column names to the table-->
             {% for item in inv_column_html %}
@@ -57,8 +57,8 @@ Date:                  4/21/21
 
 
 <div class="table-responsive">
-    <table id="" class="table">
-        <h4>Recent Transactions</h4>
+    <h4>Recent Transactions</h4>
+    <table id="" class="table table-striped">
         <thead>
             <tr> <!-- This block adds column names to the table-->
                 {% for item in trans_column_html %}
@@ -78,16 +78,6 @@ Date:                  4/21/21
         </tbody>
     </table>
 </div>
-<!--<script>-->
-<!--        $(window).on('resize', function() {-->
-<!--         if($(window).height() < 400) {-->
-<!--            $('#table').addClass('w-auto');-->
-<!--            $('#table').removeClass('table-responsive');-->
-<!--          }else{-->
-<!--            $('#table').addClass('table-responsive');-->
-<!--            $('#table').removeClass('w-auto');-->
-<!--          }-->
-<!--          })-->
-<!--</script>-->
+
 {% endblock content %}
 
