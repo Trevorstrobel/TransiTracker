@@ -97,6 +97,12 @@ class CreateTransactionForm(FlaskForm):
     name = StringField('Item Name', validators=[DataRequired(), Length(min=1, max=30)])
     num_taken = IntegerField('Number Taken From Inventory', validators=[DataRequired()])
 
-
     #buttons
     submit = SubmitField('Create')
+
+
+class TransactionSearchForm(FlaskForm):
+    #fields
+    searchStr = StringField('Search', validators=[DataRequired()])
+    #buttons
+    searchBtn = SubmitField('Search')

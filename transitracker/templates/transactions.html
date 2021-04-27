@@ -5,6 +5,15 @@ Date:                  4/21/21
 {% extends "layout.html" %}
     {% block content %}
     <h3 style="padding: 5px;">Transactions</h3>
+    <form method="POST" action="">
+        {{search.hidden_tag()}}
+        <div class="form-group search-group">
+            {{ search.searchStr.label(class="form-control-label")}}
+            {{ search.searchStr(class="form-control form-control-lg") }}
+            {{ search.searchBtn(class="btn btn-outline-info")}}
+            <a class="btn btn-outline-danger" href="{{ url_for('transactions') }}">Clear</a>
+        </div>
+    </form>
 
     <a class="btn btn-primary" href="{{ url_for('takeItem') }}" role="button" style="float: left;">Create Transaction +</a>
     <div>
