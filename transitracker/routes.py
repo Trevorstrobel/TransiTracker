@@ -290,21 +290,27 @@ def takeItem():
 
     if form.validate_on_submit():
         #Grab the item from the item ID
+        inventory = Item.query.with_entities(Item.id, Item.name, Item.inStock, Item.threshold, Item.vendorName, Item.vendorURL).all()
+        for inv in inventory:
+            for value in inv:
+                if form.name.data == inv[1]:
+                    item = Item.query.with_entities(Item.name, Item.inStock).first()
+                    item = Item.query.filter_by(name=form.name.data).first() #grabs first entry with that email
+                    employee = Employee.query.with_entities(Employee.id).first()
 
-        item = Item.query.with_entities(Item.name, Item.inStock).first()
-        item = Item.query.filter_by(name=form.name.data).first() #grabs first entry with that email
-        employee = Employee.query.with_entities(Employee.id).first()
-        
 
-        today = date.today()
-        d1 = today.strftime("%m/%d/%Y")
-        #Remove the number taken from the database
-        item.inStock = item.inStock - form.num_taken.data
-        tran = Transaction(employee_id = current_user.id, item_id = item.id, num_taken = form.num_taken.data, count_before = item.inStock, date= d1)
+                    today = date.today()
+                    d1 = today.strftime("%m/%d/%Y")
+                    #Remove the number taken from the database
+                    item.inStock = item.inStock - form.num_taken.data
+                    tran = Transaction(employee_id = current_user.id, item_id = item.id, num_taken = form.num_taken.data, count_before = item.inStock, date= d1)
 
-        db.session.add(tran)
-        db.session.commit()
-        flash('The transaction has been made', 'success')
+                    db.session.add(tran)
+                    db.session.commit()
+                    flash('The transaction has been made', 'success')
+                    return redirect(url_for('transactions'))
+                    break
+        flash('Could not find item in inventory.', 'danger')
         return redirect(url_for('transactions'))
 
     return render_template('create_transaction.html', title='Create Transaction', form = form)
