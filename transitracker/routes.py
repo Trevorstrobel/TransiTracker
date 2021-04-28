@@ -89,6 +89,9 @@ def logout():
 @login_required
 def dashboard():
 
+    cur = current_user
+    name = cur.firstName
+
     #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
 
     # Here we retrieve the inventory. 
@@ -138,7 +141,7 @@ def dashboard():
                     count += 1
         elif(user == None):
             print("user is None")
-    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols, trans_column_html = transactionCols, trans_data_html = tentran) # alertInv = alertInventory, recentTrans = recentTransactions)
+    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols, trans_column_html = transactionCols, trans_data_html = tentran, name= name) # alertInv = alertInventory, recentTrans = recentTransactions)
 
 
 #------------------------------Inventory Routes--------------------------------
@@ -295,23 +298,28 @@ def employees():
     search = EmployeeSearchForm()
     #Define Default search params (All employees)
     users = Employee.query.with_entities(Employee.id, Employee.firstName, Employee.lastName, Employee.email).all()
-    
+    searchResults = []
     #if the user submits a search, search the db for users with first or last name that matches.
     if search.validate_on_submit(): #check for form validation (in this case, just need any input)
-        
         if search.searchBtn.data:  # if the searchBtn is pressed...
-            
-            param = search.searchStr.data #search parameters
-            #first we get all entries that match first name, then last name.
-            users = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.firstName.like(param)).all()
-            users2 = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.lastName.like(param)).all()
-            
-            #add the two lists together
-            for user in users2:
-                users.append(user)
+            param = search.searchStr.data
+            for acct in users:
+                print(acct)
+                for value in acct:
+                    print(value)
+                    x = acct[1] + " " + acct[2]
+                    print(x)
+                    if param == x:
+                        searchResults.append(acct)
+                        break
+                    elif param == value:
+                        searchResults.append(acct)
 
-            #TODO: remove duplicates if there's time. 
-            #TODO: maybe use REGEX
+    x = len(searchResults)
+    if x != 0:
+        users = searchResults
+
+
             
     priv = False #default privilege value
     
