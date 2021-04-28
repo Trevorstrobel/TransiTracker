@@ -119,28 +119,48 @@ def dashboard():
 
 
     #Fetch all the transactions
-    transactions = Transaction.query.with_entities(Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
-    transactions = transactions.order_by(Transaction.id.desc()) #puts all transactions in order from most recent-oldest
+#     transactions = Transaction.query.with_entities(Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
+#     transactions = transactions.order_by(Transaction.id.desc()) #puts all transactions in order from most recent-oldest
+#     trans = []
+#     tentran = [] #holds the 10 most recent transactions
+#     for t in transactions:  #adds the users name to the transaction and replaces the employee_id
+#         emp_id = t[0]
+#         i_id = t[1]
+#         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
+#         item = Item.query.filter_by(id=i_id).first()
+#
+#         if(user != None and item != None ): #checks to see if there are any transactions present in the return from the db.
+#
+#             trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
+#
+#             count = 0
+#             #adds the 10 most recent transactions to the top 10 list.
+#             for i in range(len(trans)):
+#                 if count <= 10:
+#                     tentran.append(trans[count])
+#                     count += 1
+#         elif(user == None):
+#             print("user is None")
+
+    transactions = Transaction.query.with_entities(Transaction.id, Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
+    transactions = transactions.order_by(Transaction.id.desc())
     trans = []
-    tentran = [] #holds the 10 most recent transactions
-    for t in transactions:  #adds the users name to the transaction and replaces the employee_id
-        emp_id = t[0]
-        i_id = t[1]
+    for t in transactions:
+        emp_id = t[1]
+        i_id = t[2]
         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
         item = Item.query.filter_by(id=i_id).first()
+        trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
+    tentran = []
+    count = 0
+    for item in trans:
+        count += 1
+        if count == 11:
+            break
+        else:
+            tentran.append(item)
 
-        if(user != None and item != None ): #checks to see if there are any transactions present in the return from the db.
 
-            trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
-
-            count = 0
-            #adds the 10 most recent transactions to the top 10 list.
-            for i in range(len(trans)):
-                if count <= 10:
-                    tentran.append(trans[count])
-                    count += 1
-        elif(user == None):
-            print("user is None")
 
 
 
@@ -280,7 +300,7 @@ def takeItem():
         d1 = today.strftime("%m/%d/%Y")
         #Remove the number taken from the database
         item.inStock = item.inStock - form.num_taken.data
-        tran = Transaction(employee_id = employee.id, item_id = item.id, num_taken = form.num_taken.data, count_before = item.inStock, date= d1)
+        tran = Transaction(employee_id = current_user.id, item_id = item.id, num_taken = form.num_taken.data, count_before = item.inStock, date= d1)
 
         db.session.add(tran)
         db.session.commit()
