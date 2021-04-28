@@ -142,18 +142,21 @@ def dashboard():
 #         elif(user == None):
 #             print("user is None")
 
+
+
+    #Grabs all transactions and puts them in descending order where most recent is at the top
     transactions = Transaction.query.with_entities(Transaction.id, Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
     transactions = transactions.order_by(Transaction.id.desc())
-    trans = []
-    for t in transactions:
+    trans = [] #Holds transactions with first and last name in replace of employee id
+    for t in transactions:  #Changes employee id to the employees first and last name for transaction
         emp_id = t[1]
         i_id = t[2]
         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
         item = Item.query.filter_by(id=i_id).first()
         trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
-    tentran = []
+    tentran = []    #holds the 10 most recent transactions
     count = 0
-    for item in trans:
+    for item in trans:  #Goes through transactions and puts the most recent ten into the tentran list
         count += 1
         if count == 11:
             break
@@ -244,14 +247,14 @@ def editItem(item_id):
 @app.route("/transactions", methods=['GET', 'POST'])
 @login_required
 def transactions():
-
+    #Grabs all transactions
     transactions = Transaction.query.with_entities(Transaction.id, Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
-
+    #Puts transactions in order from most recent to the oldest
     transactions = transactions.order_by(Transaction.id.desc())
-
+    #Querys the transactions from search parameters
     searchTransactions = Transaction.query.with_entities(Transaction.employee_id, Transaction.item_id, Transaction.date).all()
 
-    trans = []
+    trans = [] #holds all transactions with first and last name in place of employee_id
     i = 0
     for t in transactions:
         print(t)
@@ -291,15 +294,15 @@ def takeItem():
     if form.validate_on_submit():
         #Grab the item from the item ID
         inventory = Item.query.with_entities(Item.id, Item.name, Item.inStock, Item.threshold, Item.vendorName, Item.vendorURL).all()
-        for inv in inventory:
+        for inv in inventory: #Loops through the inventory to see if the search parameter is in the inventory
             for value in inv:
-                if form.name.data == inv[1]:
+                if form.name.data == inv[1]:    #Checks to see if item is in inventory
                     item = Item.query.with_entities(Item.name, Item.inStock).first()
                     item = Item.query.filter_by(name=form.name.data).first() #grabs first entry with that email
                     employee = Employee.query.with_entities(Employee.id).first()
 
 
-                    today = date.today()
+                    today = date.today() #gets the date of the transaction
                     d1 = today.strftime("%m/%d/%Y")
                     #Remove the number taken from the database
                     item.inStock = item.inStock - form.num_taken.data
@@ -310,7 +313,7 @@ def takeItem():
                     flash('The transaction has been made', 'success')
                     return redirect(url_for('transactions'))
                     break
-        flash('Could not find item in inventory.', 'danger')
+        flash('Could not find item in inventory.', 'danger') #Alerts user if item was not found
         return redirect(url_for('transactions'))
 
     return render_template('create_transaction.html', title='Create Transaction', form = form)
@@ -334,7 +337,7 @@ def employees():
             param = search.searchStr.data
             for acct in users:
                 print(acct)
-                for value in acct:
+                for value in acct:  #goes through each of the employeeCols and searches to see if param is equal to the employee information
                     print(value)
                     x = acct[1] + " " + acct[2]
                     print(x)
