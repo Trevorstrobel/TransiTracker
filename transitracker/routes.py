@@ -128,9 +128,9 @@ def dashboard():
         i_id = t[1]
         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
         item = Item.query.filter_by(id=i_id).first()
-        
+
         if(user != None and item != None ): #checks to see if there are any transactions present in the return from the db.
-            
+
             trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
 
             count = 0
@@ -141,6 +141,9 @@ def dashboard():
                     count += 1
         elif(user == None):
             print("user is None")
+
+
+
     return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols, trans_column_html = transactionCols, trans_data_html = tentran, name= name) # alertInv = alertInventory, recentTrans = recentTransactions)
 
 
