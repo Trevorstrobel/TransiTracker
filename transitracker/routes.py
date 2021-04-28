@@ -89,6 +89,9 @@ def logout():
 @login_required
 def dashboard():
 
+    cur = current_user
+    name = cur.firstName
+
     #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
 
     # Here we retrieve the inventory. 
@@ -116,29 +119,52 @@ def dashboard():
 
 
     #Fetch all the transactions
-    transactions = Transaction.query.with_entities(Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
-    transactions = transactions.order_by(Transaction.id.desc()) #puts all transactions in order from most recent-oldest
+#     transactions = Transaction.query.with_entities(Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
+#     transactions = transactions.order_by(Transaction.id.desc()) #puts all transactions in order from most recent-oldest
+#     trans = []
+#     tentran = [] #holds the 10 most recent transactions
+#     for t in transactions:  #adds the users name to the transaction and replaces the employee_id
+#         emp_id = t[0]
+#         i_id = t[1]
+#         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
+#         item = Item.query.filter_by(id=i_id).first()
+#
+#         if(user != None and item != None ): #checks to see if there are any transactions present in the return from the db.
+#
+#             trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
+#
+#             count = 0
+#             #adds the 10 most recent transactions to the top 10 list.
+#             for i in range(len(trans)):
+#                 if count <= 10:
+#                     tentran.append(trans[count])
+#                     count += 1
+#         elif(user == None):
+#             print("user is None")
+
+    transactions = Transaction.query.with_entities(Transaction.id, Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
+    transactions = transactions.order_by(Transaction.id.desc())
     trans = []
-    tentran = [] #holds the 10 most recent transactions
-    for t in transactions:  #adds the users name to the transaction and replaces the employee_id
-        emp_id = t[0]
-        i_id = t[1]
+    for t in transactions:
+        emp_id = t[1]
+        i_id = t[2]
         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
         item = Item.query.filter_by(id=i_id).first()
-        
-        if(user != None and item != None ): #checks to see if there are any transactions present in the return from the db.
-            
-            trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
+        trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
+    tentran = []
+    count = 0
+    for item in trans:
+        count += 1
+        if count == 11:
+            break
+        else:
+            tentran.append(item)
 
-            count = 0
-            #adds the 10 most recent transactions to the top 10 list.
-            for i in range(len(trans)):
-                if count <= 10:
-                    tentran.append(trans[count])
-                    count += 1
-        elif(user == None):
-            print("user is None")
-    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols, trans_column_html = transactionCols, trans_data_html = tentran) # alertInv = alertInventory, recentTrans = recentTransactions)
+
+
+
+
+    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols, trans_column_html = transactionCols, trans_data_html = tentran, name= name) # alertInv = alertInventory, recentTrans = recentTransactions)
 
 
 #------------------------------Inventory Routes--------------------------------
@@ -264,21 +290,27 @@ def takeItem():
 
     if form.validate_on_submit():
         #Grab the item from the item ID
+        inventory = Item.query.with_entities(Item.id, Item.name, Item.inStock, Item.threshold, Item.vendorName, Item.vendorURL).all()
+        for inv in inventory:
+            for value in inv:
+                if form.name.data == inv[1]:
+                    item = Item.query.with_entities(Item.name, Item.inStock).first()
+                    item = Item.query.filter_by(name=form.name.data).first() #grabs first entry with that email
+                    employee = Employee.query.with_entities(Employee.id).first()
 
-        item = Item.query.with_entities(Item.name, Item.inStock).first()
-        item = Item.query.filter_by(name=form.name.data).first() #grabs first entry with that email
-        employee = Employee.query.with_entities(Employee.id).first()
-        
 
-        today = date.today()
-        d1 = today.strftime("%m/%d/%Y")
-        #Remove the number taken from the database
-        item.inStock = item.inStock - form.num_taken.data
-        tran = Transaction(employee_id = employee.id, item_id = item.id, num_taken = form.num_taken.data, count_before = item.inStock, date= d1)
+                    today = date.today()
+                    d1 = today.strftime("%m/%d/%Y")
+                    #Remove the number taken from the database
+                    item.inStock = item.inStock - form.num_taken.data
+                    tran = Transaction(employee_id = current_user.id, item_id = item.id, num_taken = form.num_taken.data, count_before = item.inStock, date= d1)
 
-        db.session.add(tran)
-        db.session.commit()
-        flash('The transaction has been made', 'success')
+                    db.session.add(tran)
+                    db.session.commit()
+                    flash('The transaction has been made', 'success')
+                    return redirect(url_for('transactions'))
+                    break
+        flash('Could not find item in inventory.', 'danger')
         return redirect(url_for('transactions'))
 
     return render_template('create_transaction.html', title='Create Transaction', form = form)
@@ -295,23 +327,28 @@ def employees():
     search = EmployeeSearchForm()
     #Define Default search params (All employees)
     users = Employee.query.with_entities(Employee.id, Employee.firstName, Employee.lastName, Employee.email).all()
-    
+    searchResults = []
     #if the user submits a search, search the db for users with first or last name that matches.
     if search.validate_on_submit(): #check for form validation (in this case, just need any input)
-        
         if search.searchBtn.data:  # if the searchBtn is pressed...
-            
-            param = search.searchStr.data #search parameters
-            #first we get all entries that match first name, then last name.
-            users = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.firstName.like(param)).all()
-            users2 = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.lastName.like(param)).all()
-            
-            #add the two lists together
-            for user in users2:
-                users.append(user)
+            param = search.searchStr.data
+            for acct in users:
+                print(acct)
+                for value in acct:
+                    print(value)
+                    x = acct[1] + " " + acct[2]
+                    print(x)
+                    if param == x:
+                        searchResults.append(acct)
+                        break
+                    elif param == value:
+                        searchResults.append(acct)
 
-            #TODO: remove duplicates if there's time. 
-            #TODO: maybe use REGEX
+    x = len(searchResults)
+    if x != 0:
+        users = searchResults
+
+
             
     priv = False #default privilege value
     
