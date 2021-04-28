@@ -1,9 +1,8 @@
 Author:           	Trevor Strobel
 Date:             	4/7/2021
-Updated:			4/20/2021
+Updated:			        4/27/2021
 
-**Note:This document is an early draft and all elements are subject to change without notice.**
-
+**Note:** For the User Manual, please see the [User Manual](UserManual/UserManual.md)
 
 
 

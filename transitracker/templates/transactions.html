@@ -3,33 +3,47 @@ Author:                Trevor Strobel
 Date:                  4/21/21
 -->
 {% extends "layout.html" %}
-{% block content %}
-<h3>Transactions</h3>
+    {% block content %}
+    <h3 class="pt-1">Transactions</h3>
 
-<a class="btn btn-primary" href="{{ url_for('takeItem') }}" role="button">+</a>
+    <div class="form-inline my-2 my-lg-2">
+      <a class="btn btn-primary mr-auto" href="{{ url_for('takeItem') }}" role="button">Create Transaction</a>
+      <form class="ml-md-auto"  method="POST" action="">
+          {{search.hidden_tag()}}
+          <div class="form-group search-group">
+              {{ search.searchStr.label(class="form-control-label mr-1")}}
+              {{ search.searchStr(class="form-control form-control-md") }}
+              {{ search.searchBtn(class="btn btn-outline-info")}}
+              <a class="btn btn-outline-danger" href="{{ url_for('employees') }}">Clear</a>
+            </div>
+      </form>
+    </div>
 
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-        <tr> <!-- This block adds column names to the table-->
-            {% for item in column_html %}
-            <th>{{item}}</th>
-            {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in data_html %} 
-        <tr>
-            {% for data in (row | list)[1:] %} <!--for every piece of data in a row (except the first(the id)), make a new cell-->
-            <td>{{ data }}</td> <!-- populate cell-->
-            {% endfor %}
-        </tr>
+    <div>
+        <div class="table-responsive" >
+            <table class="table table-striped">
+                <thead>
+                <tr> <!-- This block adds column names to the table-->
+                    {% for item in column_html %}
+                    <th>{{item}}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in data_html %}
+                <tr>
+                    {% for data in (row | list)[1:] %} <!--for every piece of data in a row (except the first(the id)), make a new cell-->
+                    <td>{{ data }}</td> <!-- populate cell-->
+                    {% endfor %}
+                </tr>
 
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
 
-{% endblock content %}
+
+    {% endblock content %}
