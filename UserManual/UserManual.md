@@ -43,6 +43,7 @@ If you do not have python3 installed, you may install it with the following comm
 ```
 $ sudo apt install python3
 ```
+<div style="page-break-after: always"></div>
 
 <h4>pip - The Python Package Installer</h4>
 
@@ -54,6 +55,18 @@ $ sudo apt install python3-pip
 
 With pip installed, we can move on to the next dependency. 
 
+
+<h4>pip Requirements</h4>
+
+As mentioned previously, this application leverages several Python packages. To install those packages, navigate within the ```TransiTracker``` directory and run the following command.
+
+
+
+```
+$ pip3 install -r requirements.txt
+```
+
+<div style="page-break-after: always"></div>
 
 <h4>PostgreSQL</h4>
 
@@ -82,13 +95,8 @@ Finally, we install the latest version of PostgreSQL:
 $ sudo apt-get -y install postgresql
 ```
 
-<h4>pip Requirements</h4>
 
-As mentioned previously, this application leverages several Python packages. To install those packages, navigate within the ```TransiTracker``` directory and run the following command.
-
-```
-$ pip3 install -r requirements.txt
-```
+<div style="page-break-after: always"></div>
 
 ---
 TransiTracker DB Creation
@@ -132,6 +140,7 @@ You should now be back at your shell, indicated by the ```$ ``` character in Bas
 
 
 
+<div style="page-break-after: always"></div>
 
 ---
 Running the Application
@@ -145,10 +154,7 @@ $ python3 run.py
 ```
 
 
-
-**Author Notes:** 
- We also need to set params for running in production mode, and set the port to 80.
-
+<div style="page-break-after: always"></div>
 
 ---
 
@@ -156,7 +162,10 @@ $ python3 run.py
 When you open the app while not logged in, you will always be redirected to the Log On page. Click the `Create Account` button found just below the Login form.
 <br><br>
 
-![Login](/UserManual/images/login.png)
+![Login](images/login.png)
+
+<div style="page-break-after: always"></div>
+
 
 You will then see the Create An Account page:
 
@@ -166,6 +175,9 @@ Fully fill out the page and click `Create Account`. You'll then be returned to t
 
 **Note:** The first account created is automatically an Admin account. All further accounts will be created as regular User accounts. For information on how to change someone's privilege level, see the section "Edit User"
 
+
+<div style="page-break-after: always"></div>
+
 ---
 
 <h2>Logging In</h2>
@@ -174,20 +186,25 @@ To log in to the TransiTracker application, navigate to the Login page by clicki
 
 Fill out the displayed Log In form with your credentials.
 
-![Login](/UserManual/images/login.png)
+![Login](images/login.png)
 
 You will then be redirected to the Dashboard page.
+
+<div style="page-break-after: always"></div>
 
 ---
 <h2>Dashboard</h2>
 
-![Dashboard](/UserManual/images/Dashboard.png)
+![Dashboard](images/Dashboard.png)
 
 The dashboard is where you'll find the most important information for your day-to-day operations in TransiTracker. There are two tables on the dashboard: Reorder Alerts and Recent Transactions.
 
 As the name implies, Reorder Alerts will display items that need to be reordered. This decision is made based on the number of that item in stock and the reorder threshold set in the item's settings. More on that later in the "Item Creation" section.
 
 Recent Transactions shows the 10 most recent transactions made in the TransiTracker system.
+
+<div style="page-break-after: always"></div>
+
 
 ---
 <h2>Inventory</h2>
@@ -196,6 +213,9 @@ Recent Transactions shows the 10 most recent transactions made in the TransiTrac
 
 
 The Inventory page lists all of the items currently in inventory. For Admin users, the `Edit` button will appear next to each item. Clicking the `Edit` button allows an Admin to edit the item's attributes.
+
+
+<div style="page-break-after: always"></div>
 
 ---
 
@@ -209,6 +229,7 @@ Fill out the form while noting that the Name field cannot be the same as another
 
 Finalize the creation by clicking the `Create` button at the bottom of the form.
 
+<div style="page-break-after: always"></div>
 
 ---
 <h2>Edit Item</h2>
@@ -217,10 +238,13 @@ As mentioned above, Admin users have the ability to edit an item's attributes us
 
 Clicking the `Edit` button returns the following page:
 
-![EditItem](/UserManual/images/edit_item.png)
+![EditItem](images/edit_item.png)
 
 
 Here, you can alter an item's Vendor details, or adjust the number in stock or reorder threshold. Be careful, as changing an item's stock here will not create a Transaction for the item. Transactions are discussed in the section "Create Transaction".
+
+<div style="page-break-after: always"></div>
+
 
 ---
 <h2>Transactions</h2>
@@ -233,6 +257,7 @@ Navigating to the Transactions page, you'll see the following:
 
 Displayed in the Transactions page is a table showing all recorded transactions. You can also search for a particular transaction by searching the employee's name, or the item name on the transaction. Type  the name of an item, or an employee's name in the `Search` bar and click the `Search` button. To clear your search results, and return to the complete list of transactions, press the `Clear` button. 
 
+<div style="page-break-after: always"></div>
 
 ---
 
@@ -240,9 +265,11 @@ Displayed in the Transactions page is a table showing all recorded transactions.
 
 Any employee can create a transaction, and **should** do so whenever they remove an item from inventory for use at work. To create a transaction, navigate to the Transactions page and click the `Create Transaction` button just below the `Search` button. 
 
-![CreateTransaction](/UserManual/images/create_transaction.png)
+![CreateTransaction](images/create_transaction.png)
 
 Fill out the form by entering in an item's name and the number of the item you're removing from the inventory. Then click the `Submit` button to finalize the transaction. 
+
+<div style="page-break-after: always"></div>
 
 ---
 <h2>Employees</h2>
@@ -253,6 +280,8 @@ accounts in the TransiTracker application.
 ![Employees](images/employees.png)
 
 You can search for an employee by entering their first or last (or both) name(s) into the `Search` bar and clicking the `Search` button. The table will then populate with the results of the search. To clear your search, and return to the complete list of employees, click the `Clear` button. 
+
+<div style="page-break-after: always"></div>
 
 ---
 
@@ -265,6 +294,8 @@ An employee is able to edit their own account details, as well as change their p
 
 
 Admin users are able to edit any account. If a user forget's their password, an Administrator may change their password. We suggest the user then change their password for increased security. 
+
+<div style="page-break-after: always"></div>
 
 ---
 
