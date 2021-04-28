@@ -54,6 +54,12 @@ Date:                  4/21/21
                         {{ form.email(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
+                <div class="form-check">
+                    {% if admin %}
+                        {{ form.adminSwitch(class="form-check-input") }}
+                        {{ form.adminSwitch.label(class="form-check-label") }}
+                    {% endif %}
+                </div>
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}

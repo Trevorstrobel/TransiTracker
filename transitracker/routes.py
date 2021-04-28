@@ -88,8 +88,7 @@ def logout():
 @app.route("/dashboard")
 @login_required
 def dashboard():
- 
-    #TODO: fetch last 10 transactions and return with render_template
+
     #TODO: fetch items that need attention from inventory (below or near threshold). return with render_template
 
     # Here we retrieve the inventory. 
@@ -113,11 +112,33 @@ def dashboard():
         #add items whose stock is less than 20% of the threshold above the threshold. (will need to be reordered soon.)    
         elif (difference > 0 and difference <= twentyP):
             alertInv.append(item)
-            inventory.remove(item) #remove the item from the local inventory list to prevent dupes.   
-    
+            inventory.remove(item) #remove the item from the local inventory list to prevent dupes.
 
-   
-    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols) # alertInv = alertInventory, recentTrans = recentTransactions)
+
+    #Fetch all the transactions
+    transactions = Transaction.query.with_entities(Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
+    transactions = transactions.order_by(Transaction.id.desc()) #puts all transactions in order from most recent-oldest
+    trans = []
+    tentran = [] #holds the 10 most recent transactions
+    for t in transactions:  #adds the users name to the transaction and replaces the employee_id
+        emp_id = t[0]
+        i_id = t[1]
+        user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
+        item = Item.query.filter_by(id=i_id).first()
+        
+        if(user != None and item != None ): #checks to see if there are any transactions present in the return from the db.
+            
+            trans.append(((user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
+
+            count = 0
+            #adds the 10 most recent transactions to the top 10 list.
+            for i in range(len(trans)):
+                if count <= 10:
+                    tentran.append(trans[count])
+                    count += 1
+        elif(user == None):
+            print("user is None")
+    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols, trans_column_html = transactionCols, trans_data_html = tentran) # alertInv = alertInventory, recentTrans = recentTransactions)
 
 
 #------------------------------Inventory Routes--------------------------------
@@ -194,12 +215,16 @@ def editItem(item_id):
 
 #------------------------------Transaction Routes--------------------------------
 #Transaction Page
-@app.route("/transactions")
+@app.route("/transactions", methods=['GET', 'POST'])
 @login_required
 def transactions():
 
     transactions = Transaction.query.with_entities(Transaction.id, Transaction.employee_id, Transaction.item_id, Transaction.num_taken, Transaction.count_before, Transaction.date)
+
     transactions = transactions.order_by(Transaction.id.desc())
+
+    searchTransactions = Transaction.query.with_entities(Transaction.employee_id, Transaction.item_id, Transaction.date).all()
+
     trans = []
     i = 0
     for t in transactions:
@@ -209,8 +234,25 @@ def transactions():
         user = Employee.query.filter_by(id=emp_id).first() #grabs first entry with that email
         item = Item.query.filter_by(id=i_id).first()
         trans.append((t.id, (user.firstName + " " + user.lastName), item.name, t.num_taken, t.count_before, t.date))
-        
-    return render_template('transactions.html', title='Transactions', data_html = trans, column_html = transactionCols, employees_html = employees)
+
+    search = TransactionSearchForm()
+    searchData = []
+    if search.validate_on_submit(): #check for form validation (in this case, just need any input)
+        if search.searchBtn.data:
+            #gets the information from the search bar
+            param = search.searchStr.data
+            #Goes through the transactions to see if the search information is in a transaction
+            for t in trans:
+                for entry in t:
+                    if entry == param:
+                        searchData.append(t)
+
+    x = len(searchData)
+    if x != 0:
+        trans = searchData
+
+
+    return render_template('transactions.html', title='Transactions', data_html = trans, column_html = transactionCols, employees_html = employees, search = search)
 
 
 
@@ -260,7 +302,6 @@ def employees():
         if search.searchBtn.data:  # if the searchBtn is pressed...
             
             param = search.searchStr.data #search parameters
-
             #first we get all entries that match first name, then last name.
             users = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.firstName.like(param)).all()
             users2 = Employee.query.with_entities(Employee.firstName, Employee.lastName, Employee.email).filter(Employee.lastName.like(param)).all()
@@ -289,14 +330,22 @@ def editEmployee(user_id):
 
     print(current_user.id)
     user = Employee.query.get_or_404(user_id) #returns 404 if the user does not exist.
-    current = False #determines whether "change password" should be visible
+    current = False #determines whether "change password" should be visible (deprecated, but deadlines are short, so im leaving it.)
     form = EditAccountForm() #create form object
+    admin = False
 
     if form.validate_on_submit():
         if form.submit.data:    
             user.firstName = form.firstName.data
             user.lastName = form.lastName.data
             user.email = form.email.data
+            
+            #sets admin status
+            if(form.adminSwitch.data):
+                user.privilege = 1
+            elif(form.adminSwitch.data == False):
+                user.privilege = 2
+            
 
             #commit to db
             db.session.commit()
@@ -304,7 +353,7 @@ def editEmployee(user_id):
             return redirect(url_for('employees'))
 
         elif form.password.data:
-            return redirect(url_for('changePassword'))
+            return redirect(url_for('changePassword', user_id=user_id))
 
     elif request.method == 'GET': #populates form fields on "GET" method
 
@@ -312,20 +361,29 @@ def editEmployee(user_id):
         form.lastName.data = user.lastName
         form.email.data = user.email
 
+        #sets form data for Admin status
+        if(user.privilege == 1):
+            form.adminSwitch.data = True
+        else:
+            form.adminSwitch.data = False
+
         if current_user.id == user.id or current_user.privilege == 1:
             current = True
 
+        if current_user.privilege == 1:
+            admin = True
 
 
 
-    return render_template('edit_account.html', title=user.email, user=user, form=form, priv=current) 
+
+    return render_template('edit_account.html', title=user.email, user=user, form=form, priv=current, admin=admin) 
 
 
 # Change Password
-@app.route("/changePassword", methods=['GET', 'POST'])
+@app.route("/changePassword/<int:user_id>", methods=['GET', 'POST'])
 @login_required
-def changePassword():
-    user = current_user
+def changePassword(user_id):
+    user = Employee.query.get_or_404(user_id) #returns 404 if the user does not exist.
     form = ChangePasswordForm()
 
     if form.validate_on_submit(): #if user submits new password
