@@ -5,14 +5,7 @@ Date:                  4/21/21
 {% extends "layout.html" %}
 {% block content %}
 <h3 class="pt-1">Inventory</h3>
-<div>
-  <form class="form-inline my-2 my-lg-2">
-    <a class="btn btn-primary" href="{{ url_for('createItem') }}" role="button">Create Item</a>
-    <input class="form-control ml-auto" type="search" placeholder="Search" aria-label="Search">
-    <button class="btn btn-secondary my-2 my-sm-2 mr-0" type="submit">Search</button>
-    <button class="btn btn-danger my-2 my-sm-2 mr-2" type="reset">Clear</button>
-  </form>
-</div>
+
 <div class="table-responsive">
     <table class="table">
         <thead>
