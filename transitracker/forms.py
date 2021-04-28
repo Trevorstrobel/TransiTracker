@@ -35,6 +35,8 @@ class EditAccountForm(FlaskForm):
     lastName = StringField('Last Name', validators=[DataRequired(), Length(min=1, max=20)])
     email = StringField('Email', render_kw={'readonly': True})
     #buttons
+    adminSwitch = BooleanField('Is this User an Admin?')
+
     submit = SubmitField('Edit Account')
     password = SubmitField('Change Password')
     
@@ -97,6 +99,12 @@ class CreateTransactionForm(FlaskForm):
     name = StringField('Item Name', validators=[DataRequired(), Length(min=1, max=30)])
     num_taken = IntegerField('Number Taken From Inventory', validators=[DataRequired()])
 
-
     #buttons
-    submit = SubmitField('Create')
+    submit = SubmitField('Submit')
+
+
+class TransactionSearchForm(FlaskForm):
+    #fields
+    searchStr = StringField('Search', validators=[DataRequired()])
+    #buttons
+    searchBtn = SubmitField('Search')
