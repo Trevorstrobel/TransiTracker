@@ -6,10 +6,11 @@ Date:                  4/21/21
 {% block content %}
 
 <h3 class="pt-1">Employees</h3>
+
 <form class="form-inline my-2 my-lg-2" method="POST" action="">
     {{search.hidden_tag()}}
-    <div class="form-group search-group ml-auto">
-        {{ search.searchStr.label(class="form-control-label ")}}
+    <div class="form-group search-group ml-md-auto">
+        {{ search.searchStr.label(class="form-control-label mr-1")}}
         {{ search.searchStr(class="form-control form-control-md") }}
         {{ search.searchBtn(class="btn btn-outline-info")}}
         <a class="btn btn-outline-danger" href="{{ url_for('employees') }}">Clear</a>
