@@ -1,0 +1,13 @@
+Author:		Trevor Strobel
+
+TransiTracker benefits from it relatively simple design. It does not rely on cloud computing
+or remote resources aside from Bootstrap, which is used for styling. The entire application 
+is run from a single Python/Flask application developed specifically for use by ECU's Transit
+department. The application and its database run on a machine located on ECU's campus. Users of 
+the TransiTracker application are employees of ECU's Transit department, and must be on ECU's
+VPN to access the application. 
+
+While there is no standalone mobile application version of TransiTracker, the application is
+fully equiped to handle display and operation on a mobile device.  Modern web browsers make it
+exceedingly simple to set style guidelines for screens of different sizes, and we used this to
+our greatest advantage. 

@@ -1,0 +1,10 @@
+Author:			Trevor Strobel
+
+Approximate time spent on the project:
+	D1:		5 Hours
+	D2-SDS:		12 Hours
+	D3-SRS:		15 Hours
+	Research:	20 Hours
+	Backend:	35 Hours
+	Front End	25 Hours
+	
