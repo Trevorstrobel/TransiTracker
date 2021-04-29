@@ -5,6 +5,6 @@ Approximate time spent on the project:
 	D2-SDS:		12 Hours
 	D3-SRS:		15 Hours
 	Research:	20 Hours
-	Backend:	35 Hours
+	Backend:	45 Hours
 	Front End	25 Hours
 	
