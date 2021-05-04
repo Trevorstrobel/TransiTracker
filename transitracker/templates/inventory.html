@@ -5,6 +5,8 @@ Date:                  4/21/21
 {% extends "layout.html" %}
 {% block content %}
 <h3 class="pt-1">Inventory</h3>
+<a class="btn btn-primary" href="{{ url_for('createItem') }}" role="button">Create Item</a>
+
 
 <div class="table-responsive">
     <table class="table">
