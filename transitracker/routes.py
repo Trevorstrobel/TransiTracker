@@ -167,7 +167,7 @@ def dashboard():
 
 
 
-    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols, trans_column_html = transactionCols, trans_data_html = tentran, name= name) # alertInv = alertInventory, recentTrans = recentTransactions)
+    return render_template('dashboard.html', title ='Dashboard', inv_data_html =alertInv, inv_column_html = itemCols, trans_column_html = transactionCols, trans_data_html = tentran, name= name) 
 
 
 #------------------------------Inventory Routes--------------------------------
@@ -175,9 +175,16 @@ def dashboard():
 @app.route("/inventory")
 @login_required
 def inventory():
+    cur = current_user
+
+    priv = False
+
+    if cur.privilege == 1:
+        priv = True
+
  
     inventory = Item.query.with_entities(Item.id, Item.name, Item.inStock, Item.threshold, Item.vendorName, Item.vendorURL).all()
-    return render_template('inventory.html', title='Inventory', column_html=itemCols,  data_html = inventory)
+    return render_template('inventory.html', title='Inventory', column_html=itemCols,  data_html = inventory, priv = priv)
 
 @app.route("/createItem", methods=['GET', 'POST'])
 def createItem():

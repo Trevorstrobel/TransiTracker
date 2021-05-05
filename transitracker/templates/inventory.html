@@ -46,10 +46,12 @@ Date:                  4/21/21
             </td>
             {% endif %}
             {% endif%}
+            {% if priv %}
             <td class = "admin"> <!-- Cell for the edit button. will be only visible to admins-->
                 <a class="btn btn-primary" href="{{ url_for('editItem', item_id=row[0])}}" role="button">Edit</a>
 
             </td>
+            {% endif %}
         </tr>
 
         {% endfor %}
