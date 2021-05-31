@@ -1,6 +1,6 @@
 Author:           	Trevor Strobel
 Date:             	4/7/2021
-Updated:			        4/27/2021
+Updated:			4/27/2021
 
 **Note:** For the User Manual, please see the [User Manual](UserManual/UserManual.md)
 
